@@ -1,7 +1,7 @@
 import { URLToCheck } from '../../imports/api/urlsToCheck.js';
 
 Template.hostList.onCreated(function() {
-
+    this.subscribe("urlChecks");
 });
 
 Template.hostList.onRendered(function() {
