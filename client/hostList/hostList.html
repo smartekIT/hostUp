@@ -1,0 +1,25 @@
+<template name="hostList">
+    <h5>Hosts Monitored</h5>
+    <div class="row">
+        <div class="column">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Host URL</th>
+                        <th>Host Status</th>
+                        <th>Host Last Checked</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{hostURL}}</td>
+                        <td>{{hostStatus}}</td>
+                        <td>{{hostLastChecked}}</td>
+                        <td>Edit / Delete</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
