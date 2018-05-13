@@ -16,7 +16,7 @@
                         {{#each hostURL}}
                         <tr>
                             <td>{{url}}</td>
-                            <td>{{getStatus.status}}</td>
+                            <td style="background: {{getStatus.statusColor}}">{{getStatus.status}}</td>
                             <td>{{lastRunOn}}</td>
                             <td>Edit / Delete</td>
                         </tr>
