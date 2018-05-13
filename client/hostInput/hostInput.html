@@ -1,9 +1,33 @@
 <template name="hostInput">
-    <h4>Enter Host to Check</h4>
-    <div class="row">
-        <div class="column">
-            <label for="urlToCheck">URL To Check</label>
-            <input type="text" class="urlToCheck" id="urlToCheck" />
+    <div class="container pushDown">
+        <h4>Enter Host to Check</h4>
+        <div class="row">
+            <div class="column">
+                <label for="urlToCheck">URL To Check</label>
+                <input type="text" class="urlToCheck" id="urlToCheck" placeholder="URL To Check" />
+            </div>
+            <div class="column">
+                <label for="checkFrequency">Check How Often</label>
+                <input type="number" class="checkFrequency" id="checkFrequency" placeholder="Check Every ? Minutes" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <input type="checkbox" class="emailIfDown" id="emailIfDown" />
+                <label class="label-inline" for="emailIfDown">Email if Down?</label>
+            </div>
+            <div class="column">
+                <label for="emailAddress">Email Address</label>
+                <input type="email" class="emailAddress" id="emailAddress" placeholder="email@address.com">
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <a class="button cancelBtn" id="cancel">Cancel</a>
+            </div>
+            <div class="column">
+                <a class="button submitBtn" id="submitURL">Save</a>
+            </div>
         </div>
     </div>
 </template>

@@ -1,0 +1,8 @@
+.submitBtn {
+    background: green;
+    float: right;
+}
+
+.cancelBtn {
+    background: orange;
+}

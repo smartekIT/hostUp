@@ -17,13 +17,38 @@ Meteor.methods({
     //  Add URLs to Check
     //
     // ******************************************************************
-    'newUrl.add' (url, timeBetweenChecks, emailIfDown, emailAddress, emailRepeat, emailRepeatHowOften) {
+    'host.add' (url, timeBetweenChecks, emailIfDown, emailAddress) {
+        check(url, String);
+        check(timeBetweenChecks, Number);
+        check(emailIfDown, Boolean);
+        check(emailAddress, String);
+
+        // if (!this.userId) {
+        //     throw new Meteor.Error('User is not allowed to add URLs to the system, make sure you are logged in.');
+        // }
+
+        return URLToCheck.insert({
+            url: url,
+            freqCheck: timeBetweenChecks,
+            emailIfDown: emailIfDown,
+            emailAddress: emailAddress,
+        });
+    },
+    'host.edit' (urlId, url, timeBetweenChecks, emailIfDown, emailAddress, emailRepeat, emailRepeatHowOften) {
 
     },
-    'url.edit' (urlId, url, timeBetweenChecks, emailIfDown, emailAddress, emailRepeat, emailRepeatHowOften) {
+    // ******************************************************************
+    //
+    //  Remove URLs
+    //
+    // ******************************************************************
+    'host.delete' (urlId) {
+        check(urlId, String);
 
-    },
-    'url.delete' (urlId) {
+        // if (!this.userId) {
+        //     throw new Meteor.Error('User is not allowed to remove URls from the system, make sure you are logged in..');
+        // }
 
+        return URLToCheck.remove({ _id: urlId });
     },
 });
