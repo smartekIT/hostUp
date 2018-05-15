@@ -7,9 +7,9 @@ import { log } from 'shelljs/src/common';
 
 Meteor.startup(() => {
   checkURLsRepeat();
-  Meteor.setTimeout(function() {
-    checkURLsRepeat();
-  }, 60000);
+  // Meteor.setTimeout(function() {
+  //   checkURLsRepeat();
+  // }, 60000);
 });
 
 checkURLsRepeat = function() {
@@ -23,6 +23,12 @@ checkURLsRepeat = function() {
     if (typeof checkURLs != 'undefined' && checkURLs != "" && checkURLs != null) {
       for (i=0; i < checkURLs.length; i++) {
           let myURL = checkURLs[i].url;
+          let freq = checkURLs[i].freqCheck;
+          let now = new Date();
+          let nowFormatted = moment(now).format('YYYY-MM-DD hh:mm:ss');
+          let nextCheck = moment(nowFormatted).add(freq, 'minutes').format('YYYY-MM-DD hh:mm:ss');
+          // console.log("Now is: " + nowFormatted);
+          // console.log(("Next Check at: " + nextCheck));
           HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
             if (err) {
                 console.log("Error:" + myURL + " " + err);
@@ -33,7 +39,7 @@ checkURLsRepeat = function() {
                     console.log("Success!");
                     Meteor.call('hostStatus.add', myURL, status, "#32CD32");
                 } else if (result.statusCode == 400) {
-                  let status = "Bad REquest";
+                  let status = "Bad Request";
                   console.log("Success! Bad Request Returned.");
                   Meteor.call('hostStatus.add', myURL, status, "#32CD32");
                 } else if (result.statusCode == 401) {
@@ -89,12 +95,19 @@ checkURLsRepeat = function() {
             }
           });
       }
+      repeatChecks();
     } else {
       console.log("Didn't find any URLs to Check at this time.");
     }
-    return;
+    
   } catch (error) {
     console.log("Error Occurred: " + error);
   }
   
+}
+
+repeatChecks = function() {
+  Meteor.setTimeout(function() {
+    checkURLsRepeat();
+  }, 15000);
 }
