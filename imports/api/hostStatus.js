@@ -12,15 +12,17 @@ HostStatus.allow({
 });
 
 Meteor.methods({
-    'hostStatus.add' (url, status, statusColor) {
+    'hostStatus.add' (url, status, statusColor, nextRun) {
         check(url, String);
         check(status, String);
         check(statusColor, String);
+        check(nextRun, String);
 
         return HostStatus.insert({
             url: url,
             status: status,
             statusColor: statusColor,
+            nextRun: nextRun,
             runOn: new Date,
         });
     }

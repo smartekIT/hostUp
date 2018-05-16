@@ -7,9 +7,6 @@ import { log } from 'shelljs/src/common';
 
 Meteor.startup(() => {
   checkURLsRepeat();
-  // Meteor.setTimeout(function() {
-  //   checkURLsRepeat();
-  // }, 60000);
 });
 
 checkURLsRepeat = function() {
@@ -25,75 +22,186 @@ checkURLsRepeat = function() {
           let myURL = checkURLs[i].url;
           let freq = checkURLs[i].freqCheck;
           let now = new Date();
-          let nowFormatted = moment(now).format('YYYY-MM-DD hh:mm:ss');
-          let nextCheck = moment(nowFormatted).add(freq, 'minutes').format('YYYY-MM-DD hh:mm:ss');
-          // console.log("Now is: " + nowFormatted);
-          // console.log(("Next Check at: " + nextCheck));
-          HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
-            if (err) {
-                console.log("Error:" + myURL + " " + err);
-            } else {
-                // console.dir(result);
-                if (result.statusCode == 200) {
-                    let status = "Up";
-                    console.log("Success!");
-                    Meteor.call('hostStatus.add', myURL, status, "#32CD32");
-                } else if (result.statusCode == 400) {
-                  let status = "Bad Request";
-                  console.log("Success! Bad Request Returned.");
-                  Meteor.call('hostStatus.add', myURL, status, "#32CD32");
-                } else if (result.statusCode == 401) {
-                  let status = "Authorization Required";
-                  console.log("Success! Authorization Required.");
-                  Meteor.call('hostStatus.add', myURL, status, "#ff0000");
-                } else if (result.statusCode == 402) {
-                  let status = "Payment Required";
-                  console.log("Success! Payment Required.");
-                  Meteor.call('hostStatus.add', myURL, status, "#ff0000");
-                } else if (result.statusCode == 403) {
-                  let status = "Access Forbidden";
-                  console.log("Success! Access Forbidden.");
-                  Meteor.call('hostStatus.add', myURL, status, "#32CD32");
-                } else if (result.statusCode == 404) {
-                  let status = "Not Found!";
-                  console.log("Not Found! Site may be down!");
-                  Meteor.call('hostStatus.add', myURL, status, "#ff0000");
-                  // this should trigger an alert.
-                } else if (result.statusCode == 405) {
-                  let status = "Method Not Allowed";
-                  console.log("Success! Method Not Allowed");
-                  Meteor.call('hostStatus.add', myURL, status, "#32CD32");
-                } else if (result.statusCode == 406) {
-                  let status = "Not Acceptable";
-                  console.log("Host May Be Down! Not Acceptable.");
-                  Meteor.call('hostStatus.add', myURL, status, "#FFA500");
-                } else if (result.statusCode == 407) {
-                  let status = "Proxy Authentication Required";
-                  console.log("Success! Proxy Authentication Required.");
-                  Meteor.call('hostStatus.add', myURL, status, "#FFA500");
-                } else if (result.statusCode == 408) {
-                  let status = "Request Timeout";
-                  console.log("Host May Be Down! Request Timeout");
-                  Meteor.call('hostStatus.add', myURL, status, "#FFA500");
-                } else if (result.statusCode == 409) {
-                  let status = "Conflict";
-                  console.log("Host May Be Down! Conflict");
-                  Meteor.call('hostStatus.add', myURL, status, "#FFA500");
-                } else if (result.statusCode == 410) {
-                  let status = "Gone";
-                  console.log("Host May Be Down! Gone");
-                  Meteor.call('hostStatus.add', myURL, status, "#FFA500");
-                } else if (result.statusCode == 414) {
-                  let status = "Request URL Too Large";
-                  console.log("Error! Request URL Too Large.");
-                  Meteor.call('hostStatus.add', myURL, status, "#FF0000");
-                } else if (result.statusCode == 500) {
-                  let status = "Internal Server Error";
-                  console.log("Site Inoperative. Internal Server Error.");
-                  Meteor.call('hostStatus.add', myURL, status, "#FF0000");
+          let nowFormatted = moment(now).format('YYYY-MM-DD HH:mm:ss');
+          let nowCompare = moment(nowFormatted).toISOString();
+          
+
+          let currStatus = HostStatus.findOne({ url: myURL }, { sort: { runOn: -1 }});
+
+          
+          
+          
+          if (typeof currStatus != 'undefined') {
+            let nextRunISO = moment(currStatus.nextRun).toISOString();
+            console.log("Now ISO is: " + nowCompare);
+            
+            console.log("Moment in ISO: " + nextRunISO);
+
+            if (nowCompare >= nextRunISO) {
+              console.log("Should run the check for " + myURL + " now.");
+
+              let nextCheck = moment(nowFormatted).add(freq, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+              // console.log("Now is: " + nowFormatted);
+              // console.log(("Next Check at: " + nextCheck));
+
+              let status = "";
+              let color = "";
+
+              HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
+                if (err) {
+                    console.log("Error:" + myURL + " " + err);
+                } else {
+                    // console.dir(result);
+                    switch (result.statusCode) {
+                      case 200:
+                        status = "Up";
+                        color = "#32CD32";
+                        break;
+                      case 400:
+                        status = "Bad Request: 400";
+                        color = "#32CD32";
+                        break;
+                      case 401:
+                        status = "Authorization Required";
+                        color = "#32CD32";
+                        break;
+                      case 402:
+                        status = "Payment Required";
+                        color = "#32CD32";
+                        break;
+                      case 403:
+                        status = "Access Forbidden";
+                        color = "#32CD32";
+                        break;
+                      case 404:
+                        status = "Not Found";
+                        color = "#ff0000";
+                        break;
+                      case 405:
+                        status = "Method Not Allowed";
+                        color = "#32CD32";
+                        break;
+                      case 406:
+                        status = "Not Acceptable";
+                        color = "#FFA500";
+                        break;
+                      case 407:
+                        status = "Proxy Authentication Required";
+                        color = "#FFA500";
+                        break;
+                      case 408:
+                        status = "Request Timeout";
+                        color = "#FFA500";
+                        break;
+                      case 409:
+                        status = "Conflict";
+                        color = "#FFA500";
+                        break;
+                      case 410:
+                        status = "Gone";
+                        color = "#FFA500";
+                        break;
+                      case 414:
+                        status = "Request URL Too Large";
+                        color = "#FFA500";
+                        break;
+                      case 500:
+                        status = "Internal Server Error";
+                        color = "#FF0000";
+                        break;
+                    }
+
+                    Meteor.call('hostStatus.add', myURL, status, color, nextCheck);
+
                 }
+              });
+              
+            } else {
+              console.log("SKipping run for " + myURL + " for now. It's not Time.");
+
+              
             }
-          });
+          } else {
+            console.log("No run yet.");
+
+            let nextCheck = moment(nowFormatted).add(freq, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+              // console.log("Now is: " + nowFormatted);
+              // console.log(("Next Check at: " + nextCheck));
+
+              let status = "";
+              let color = "";
+
+              HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
+                if (err) {
+                    console.log("Error:" + myURL + " " + err);
+                } else {
+                    // console.dir(result);
+                    switch (result.statusCode) {
+                      case 200:
+                        status = "Up";
+                        color = "#32CD32";
+                        break;
+                      case 400:
+                        status = "Bad Request: 400";
+                        color = "#32CD32";
+                        break;
+                      case 401:
+                        status = "Authorization Required";
+                        color = "#32CD32";
+                        break;
+                      case 402:
+                        status = "Payment Required";
+                        color = "#32CD32";
+                        break;
+                      case 403:
+                        status = "Access Forbidden";
+                        color = "#32CD32";
+                        break;
+                      case 404:
+                        status = "Not Found";
+                        color = "#ff0000";
+                        break;
+                      case 405:
+                        status = "Method Not Allowed";
+                        color = "#32CD32";
+                        break;
+                      case 406:
+                        status = "Not Acceptable";
+                        color = "#FFA500";
+                        break;
+                      case 407:
+                        status = "Proxy Authentication Required";
+                        color = "#FFA500";
+                        break;
+                      case 408:
+                        status = "Request Timeout";
+                        color = "#FFA500";
+                        break;
+                      case 409:
+                        status = "Conflict";
+                        color = "#FFA500";
+                        break;
+                      case 410:
+                        status = "Gone";
+                        color = "#FFA500";
+                        break;
+                      case 414:
+                        status = "Request URL Too Large";
+                        color = "#FFA500";
+                        break;
+                      case 500:
+                        status = "Internal Server Error";
+                        color = "#FF0000";
+                        break;
+                    }
+
+                    Meteor.call('hostStatus.add', myURL, status, color, nextCheck);
+
+                }
+              });
+          }
+
+            
       }
       repeatChecks();
     } else {
@@ -109,5 +217,5 @@ checkURLsRepeat = function() {
 repeatChecks = function() {
   Meteor.setTimeout(function() {
     checkURLsRepeat();
-  }, 15000);
+  }, 60000);
 }

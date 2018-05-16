@@ -1,6 +1,7 @@
 <template name="hostList">
     <div class="container pushDown">
         <h4>Hosts Monitored</h4>
+        {{#if Template.subscriptionsReady}}
         <div class="row">
             <div class="column">
                 <table>
@@ -17,7 +18,7 @@
                         <tr>
                             <td>{{url}}</td>
                             <td style="background: {{getStatus.statusColor}}">{{getStatus.status}}</td>
-                            <td>{{lastRunOn}}</td>
+                            <td>{{runOnDate}}</td>
                             <td>Edit / Delete</td>
                         </tr>
                         {{/each}}
@@ -25,5 +26,8 @@
                 </table>
             </div>
         </div>
+        {{else}}
+            {{> spinner}}
+        {{/if}}
     </div>
 </template>
