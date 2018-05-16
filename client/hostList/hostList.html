@@ -9,7 +9,8 @@
                         <tr>
                             <th>Host URL</th>
                             <th>Host Status</th>
-                            <th>Host Last Checked</th>
+                            <th>Last Checked</th>
+                            <th>Next Check</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -18,7 +19,8 @@
                         <tr>
                             <td>{{url}}</td>
                             <td style="background: {{getStatus.statusColor}}">{{getStatus.status}}</td>
-                            <td>{{runOnDate}}</td>
+                            <td>{{getStatus.lastRunOn}}</td>
+                            <td>{{getStatus.nextRunOn}}</td>
                             <td>Edit / Delete</td>
                         </tr>
                         {{/each}}

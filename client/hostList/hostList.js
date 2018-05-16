@@ -18,22 +18,41 @@ Template.hostList.helpers({
         try {
             let url = this.url;
 
+            let thisHostStatus = {};
+
             let myHostStatus = HostStatus.findOne({ "url": url }, { sort: { "runOn": -1 }});
             let runOnDate = myHostStatus.runOn;
             if (runOnDate != "") {
-                let momentOnDate = moment(runOnDate).format("MM/DD/YYYY HH:mm:ss");
+                var momentOnDate = moment(runOnDate).format("MM/DD/YYYY HH:mm:ss");
                 Session.set("lastRunOn", momentOnDate);
             } else {
                 return "Not Run Yet.";
+                Session.set("lastRunOn", "");
             }
 
-            return myHostStatus;
+            if (myHostStatus.nextRun != "") {
+                var nextRunAt = moment(myHostStatus.nextRun).format("MM/DD/YYYY HH:mm:ss");
+                Session.set("nextRunOn", nextRunAt);
+            } else {
+                nextRunAt = "";
+                Session.set("nextRunOn", nextRunAt);
+            }
+
+            thisHostStatus.lastRunOn = momentOnDate;
+            thisHostStatus.nextRunOn = nextRunAt;
+            thisHostStatus.status = myHostStatus.status;
+            thisHostStatus.statusColor = myHostStatus.statusColor;
+
+            return thisHostStatus;
         } catch (error) {
             console.log("Error in getStatus call: " + error);
         }
     },
     runOnDate: function() {
         return Session.get("lastRunOn");
+    },
+    nextRunIs: function() {
+        return Session.get("nextRunOn");
     }
 });
 
