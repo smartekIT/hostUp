@@ -1,5 +1,5 @@
-## hostUp - A simple URL Status Checker
-#### Written with MeteorJS using NOdeJS, HTML5, Javascript
+## hostUp - A simple URL Status Checker for Uptime
+#### Written with MeteorJS using NodeJS, HTML5, Javascript
 
 To run it in Dev mode you'll need to do the following:
 
@@ -39,9 +39,9 @@ Or something very similar.
 
 Now you can navigate to localhost:3000 as indicated to see the page and input your first url to check.  Please use full URLs including http or https
 
-The menu hamburger icon in the upper left allows you to move to the input screen and back tot he monitor screen.
+The menu icon in the upper left allows you to move to the input screen and back tot he monitor screen.
 
-*Note*: this application just checks to see if the site is up or not.  This is not a wathcer for changes.
+*NOTE*: this application just checks to see if the site is up or not.  This is not a watcher for changes.
 
 ### Production Use
 I'll add more instructions later on how to set this up for production use, and probably will add a script for those running it on Linux or Mac to make it pretty easy.

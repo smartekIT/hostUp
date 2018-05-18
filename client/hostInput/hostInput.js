@@ -45,7 +45,7 @@ Template.hostInput.events({
                 showSnackbar("Error Adding Host!", "red");
             } else {
                 showSnackbar("Host Added Successfully!", "green");
-                checkURLsRepeat();
+                Meteor.call("hosts.call", url);
             }
         });
     },
