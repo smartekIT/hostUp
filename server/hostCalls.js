@@ -2,7 +2,7 @@ import { URLToCheck } from '../imports/api/urlsToCheck.js';
 import { HostStatus } from '../imports/api/hostStatus.js';
 
 Meteor.methods({
-    'hosts.call' (url) {
+    'hosts.call' (myURL) {
       HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
         if (err) {
             console.log("Error:" + myURL + " " + err);
