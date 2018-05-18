@@ -22,7 +22,7 @@ Template.hostList.helpers({
 
             let myHostStatus = HostStatus.findOne({ "url": url }, { sort: { "runOn": -1 }});
             let runOnDate = myHostStatus.runOn;
-            if (runOnDate != "") {
+            if (runOnDate != "" && runOnDate != null) {
                 var momentOnDate = moment(runOnDate).format("MM/DD/YYYY HH:mm:ss");
                 Session.set("lastRunOn", momentOnDate);
             } else {
@@ -57,5 +57,23 @@ Template.hostList.helpers({
 });
 
 Template.hostList.events({
+    'click .editHost' (event) {
+        event.preventDefault();
 
+    },
+    'click .deleteHost' (event) {
+        event.preventDefault();
+
+        let hostId = this._id;
+        // console.log("HOst id: " + hostId);
+        
+        Meteor.call('host.delete', hostId, function(err, result){
+            if (err) {
+                console.log("Error deleting host: " + err);
+                showSnackbar("Error Deleting Host", "red");
+            } else {
+                showSnackbar("Host Deleted Successfully!", "green");
+            }
+        });
+    }
 });

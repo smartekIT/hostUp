@@ -21,7 +21,10 @@
                             <td style="background: {{getStatus.statusColor}}">{{getStatus.status}}</td>
                             <td>{{getStatus.lastRunOn}}</td>
                             <td>{{getStatus.nextRunOn}}</td>
-                            <td>Edit / Delete</td>
+                            <td>
+                                <i class="fa fa-edit editHost"></i>
+                                <i class="fa fa-trash deleteHost"></i>    
+                            </td>
                         </tr>
                         {{/each}}
                     </tbody>
