@@ -37,7 +37,11 @@ Once it's running you should see this in your terminal:
 
 Or something very similar.
 
-Now you can navigate to localhost:3000 as indicated to see the page and input your first url to check.  Please use full URLs including http or https
+Now you can navigate to localhost:3000 as indicated to see the page.  Use the Menu icon in the upper left of the screen to get to the host input screen.  Input your first url to check.  Please use full URLs including http or https.
+
+Once you've added a URL or two to check, you can navigate back to the Host List view. The hosts you are monitoring should show in a grid, and you can see their status, the last time they were checked, and the next time they'll be checked in the view. You can edit or delete a host using the Action icons at the right of each column. 
+
+Clicking on a column will bring up the Ping data for that host.  It brings back the last 100 ping time results in a chart. 
 
 The menu icon in the upper left allows you to move to the input screen and back tot he monitor screen.
 
@@ -45,4 +49,12 @@ The menu icon in the upper left allows you to move to the input screen and back 
 
 ### Production Use
 I'll add more instructions later on how to set this up for production use, and probably will add a script for those running it on Linux or Mac to make it pretty easy.
+
+## To Do Still
+Get the email function working so the system can be setup to send out alert emails when a monitored site is not responding, down, or having issues. 
+
+## Contribue
+I'm always 100% open to contributions from anyone willing to help out, learn or otherwise. 
+
+I currently do all of my work on a private gitlab repo, then mirror it to here, so there may be days when there are no updates or changes.
 
