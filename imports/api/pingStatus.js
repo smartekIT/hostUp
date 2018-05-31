@@ -12,17 +12,14 @@ PingStatus.allow({
 });
 
 Meteor.methods({
-    'pingCheck.add' (url, pingResponse, pingTime, color) {
+    'pingCheck.add' (url, pingTime) {
         check(url, String);
-        check(pingResponse, String);
-        check(pingTime, Number);
-        check(color, String);
+        check(pingTime, String);
 
         return PingStatus.insert({
             url: url,
-            pingResponse: pingResponse,
             pingTime: pingTime,
-            color: color
+            runOn: new Date(),
         });
     },
 });

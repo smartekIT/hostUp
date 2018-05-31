@@ -1,6 +1,11 @@
 <template name="headerBar">
-    <header class="stickyNav">
-        {{> menuBtn}}<h4 class="middleHead">Host Up</h4>
-        {{> navMain}}
-    </header>
+    <nav>
+        <div class="nav-wrapper blue darken-4">
+          <a href="#" class="brand-logo center">Host Up</a>
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li>{{> menuBtn}}</li>
+          </ul>
+        </div>
+      </nav>
+      {{> navMain}}
 </template>

@@ -1,13 +1,19 @@
 import { URLToCheck } from '../../imports/api/urlsToCheck.js';
 import { HostStatus } from '../../imports/api/hostStatus.js';
+import { PingStatus } from '../../imports/api/pingStatus.js';
 
 Template.hostList.onCreated(function() {
     this.subscribe("urlChecks");
     this.subscribe("hostStatuses");
+
+    this.autorun(() => {
+        this.subscribe("pingStatuses", Session.get("myUrl"));
+    })
+    
 });
 
 Template.hostList.onRendered(function() {
-    
+    $('.collapsible').collapsible();
 });
 
 Template.hostList.helpers({
@@ -53,7 +59,7 @@ Template.hostList.helpers({
     },
     nextRunIs: function() {
         return Session.get("nextRunOn");
-    }
+    },
 });
 
 Template.hostList.events({
@@ -65,7 +71,7 @@ Template.hostList.events({
         event.preventDefault();
 
         let hostId = this._id;
-        // console.log("HOst id: " + hostId);
+        // console.log("Host id: " + hostId);
         
         Meteor.call('host.delete', hostId, function(err, result){
             if (err) {
@@ -75,5 +81,41 @@ Template.hostList.events({
                 showSnackbar("Host Deleted Successfully!", "green");
             }
         });
-    }
+    },
+    'click .getPingInfo' (event) {
+        Session.set("myUrl", this.url);
+        let thisId = this._id;
+
+        // console.log('This URL is: ' + this.url);
+        // console.log("-------- !!!!!!!!!!! -------------");
+
+        let pingObj = [];
+
+        pullPings(pingObj);
+        
+    },
 });
+
+pullPings = function(pingObj) {
+    let pingTimes = PingStatus.find({}).fetch();
+    // console.dir(pingTimes);
+    let noOfPings = pingTimes.length;
+    for (i = (noOfPings-1); i >= 0; i--) {
+        // cycle through ping times and get only times for specific days.
+        let pingTimeSplit = (pingTimes[i].pingTime).split(' ');
+        let pingTime = parseFloat(pingTimeSplit[0]);
+
+        let runOnUnformat = pingTimes[i].runOn;
+        let runOnFormat = moment(runOnUnformat).format('dddd hh:mm:ss a');
+
+        pingObj.push([runOnFormat, pingTime]);
+    }
+
+    Session.set("pingObj", pingObj);
+    setTimeout(function() {
+        let modalPing = document.getElementById('modal-ping');
+        modalPing.style.display = "block";
+    }, 500);
+    
+
+}

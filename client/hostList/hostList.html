@@ -1,38 +1,36 @@
 <template name="hostList">
     <div class="container pushDown">
         <h4>Hosts Monitored</h4>
+        
         {{#if Template.subscriptionsReady}}
-        <div class="row">
-            <div class="column">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Host URL</th>
-                            <th>Host Status</th>
-                            <th>Last Checked</th>
-                            <th>Next Check</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each hostURL}}
-                        <tr>
-                            <td>{{url}}</td>
-                            <td style="background: {{getStatus.statusColor}}">{{getStatus.status}}</td>
-                            <td>{{getStatus.lastRunOn}}</td>
-                            <td>{{getStatus.nextRunOn}}</td>
-                            <td>
-                                <i class="fa fa-edit editHost"></i>
-                                <i class="fa fa-trash deleteHost"></i>    
-                            </td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <table class="highlight striped">
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Status</th>
+                    <th>Last Checked</th>
+                    <th>Next Check</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each hostURL}}
+                <tr class="getPingInfo">
+                    <td>{{url}}</td>
+                    <td  style="background: {{getStatus.statusColor}}">{{getStatus.status}}</td>
+                    <td>{{getStatus.lastRunOn}}</td>
+                    <td>{{getStatus.nextRunOn}}</td>
+                    <td>
+                        <i class="fa fa-edit editHost isPointer"></i>
+                        <i class="fa fa-trash deleteHost isPointer"></i>    
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
         {{else}}
             {{> spinner}}
-        {{/if}}
+        {{/if}}  
     </div>
+    {{> pingResult}}
 </template>

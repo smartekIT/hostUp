@@ -1,0 +1,11 @@
+<template name="pingResult">
+    <div id="modal-ping" class="myModal">
+        <div class="myModal-header">
+                <i class="fa fa-close pingTimeModal myModalClose"></i>
+                <h5>Ping Times for {{myUrl}}</h5>
+        </div>
+        <div class="myModal-content">
+            {{> highchartsHelper chartId="pingTimeChart" chartWidth="65%" chartObject=pingTimeChart}}
+        </div>
+    </div>
+</template>
