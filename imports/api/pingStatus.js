@@ -16,9 +16,12 @@ Meteor.methods({
         check(url, String);
         check(pingTime, String);
 
+        let pingTimeSplit = (pingTime).split(' ');
+        let newpingTime = parseFloat(pingTimeSplit[0]);
+
         return PingStatus.insert({
             url: url,
-            pingTime: pingTime,
+            pingTime: newpingTime,
             runOn: new Date(),
         });
     },

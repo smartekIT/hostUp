@@ -84,6 +84,7 @@ Template.hostList.events({
     },
     'click .getPingInfo' (event) {
         Session.set("myUrl", this.url);
+        Materialize.updateTextFields();
         let thisId = this._id;
 
         // console.log('This URL is: ' + this.url);
@@ -92,7 +93,7 @@ Template.hostList.events({
         let pingObj = [];
 
         pullPings(pingObj);
-        
+ 
     },
 });
 
@@ -102,9 +103,9 @@ pullPings = function(pingObj) {
     let noOfPings = pingTimes.length;
     for (i = (noOfPings-1); i >= 0; i--) {
         // cycle through ping times and get only times for specific days.
-        let pingTimeSplit = (pingTimes[i].pingTime).split(' ');
-        let pingTime = parseFloat(pingTimeSplit[0]);
 
+        let pingTime = pingTimes[i].pingTime;
+        
         let runOnUnformat = pingTimes[i].runOn;
         let runOnFormat = moment(runOnUnformat).format('dddd hh:mm:ss a');
 
@@ -115,7 +116,7 @@ pullPings = function(pingObj) {
     setTimeout(function() {
         let modalPing = document.getElementById('modal-ping');
         modalPing.style.display = "block";
-    }, 500);
+    }, 250);
     
 
 }

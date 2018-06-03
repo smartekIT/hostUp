@@ -7,7 +7,11 @@ import shelljs from 'shelljs';
 import { log } from 'shelljs/src/common';
 
 Meteor.methods({
-    'hosts.call' (myURL) {
+    'hosts.call' (myURL, freq) {
+      let now = new Date();
+      let nowFormatted = moment(now).format('YYYY-MM-DD HH:mm:ss');
+      let nextCheck = moment(now).add(freq, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+      
       HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
         if (err) {
             console.log("Error:" + myURL + " " + err);
@@ -71,7 +75,7 @@ Meteor.methods({
                 color = "#FF0000";
                 break;
             }
-  
+            
             Meteor.call('hostStatus.add', myURL, status, color, nextCheck);
           }
         repeatChecks(nextCheck);

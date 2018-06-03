@@ -1,4 +1,5 @@
 <template name="pingResult">
+    {{#if Template.subscriptionsReady}}
     <div id="modal-ping" class="myModal">
         <div class="myModal-header">
                 <i class="fa fa-close pingTimeModal myModalClose"></i>
@@ -8,4 +9,7 @@
             {{> highchartsHelper chartId="pingTimeChart" chartWidth="65%" chartObject=pingTimeChart}}
         </div>
     </div>
+    {{else}}
+        {{> spinner}}
+    {{/if}}
 </template>

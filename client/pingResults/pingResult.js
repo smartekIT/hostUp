@@ -1,7 +1,9 @@
 import { PingStatus } from '../../imports/api/pingStatus.js';
 
 Template.pingResult.onCreated(function() {
-    this.subscribe("pingStatuses", Session.get("myUrl"));
+    this.autorun(() => {
+        this.subscribe("pingStatuses", Session.get("myUrl"));
+    })
 });
 
 Template.pingResult.onRendered(function() {
@@ -14,6 +16,7 @@ Template.pingResult.helpers({
     },
     pingTimeChart: function() {
         let pingTimeObj = Session.get("pingObj");
+        Materialize.updateTextFields();
 
         // console.log(pingTimeObj);
         return {

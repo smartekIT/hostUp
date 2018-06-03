@@ -38,3 +38,8 @@ email
 sacha:spin
 maazalik:highcharts
 anychart:anychart
+
+accounts-base@1.4.0
+accounts-password@1.5.0
+useraccounts:unstyled
+alanning:roles
