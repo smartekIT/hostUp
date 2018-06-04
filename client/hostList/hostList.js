@@ -66,6 +66,17 @@ Template.hostList.events({
     'click .editHost' (event) {
         event.preventDefault();
 
+        Session.set("urlId", this._id);
+        Session.set("editUrl", this.url);
+        Session.set("freq", this.freqCheck);
+        Session.set("emailIfDown", this.emailIfDown);
+        Session.set("emailAddress", this.emailAddress);
+
+        // console.log("emailIfDown: " + emailIfDown);
+
+        Session.set("inputMode", "edit");
+
+        FlowRouter.go('/hostInput');
     },
     'click .deleteHost' (event) {
         event.preventDefault();

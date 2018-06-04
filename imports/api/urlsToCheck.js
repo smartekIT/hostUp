@@ -23,19 +23,38 @@ Meteor.methods({
         check(emailIfDown, Boolean);
         check(emailAddress, String);
 
-        // if (!this.userId) {
-        //     throw new Meteor.Error('User is not allowed to add URLs to the system, make sure you are logged in.');
-        // }
+        if (!this.userId) {
+            throw new Meteor.Error('User is not allowed to add URLs to the system, make sure you are logged in.');
+        }
 
         return URLToCheck.insert({
             url: url,
             freqCheck: timeBetweenChecks,
             emailIfDown: emailIfDown,
             emailAddress: emailAddress,
+            addedBy: Meteor.users.findOne(this.userId).username,
         });
     },
     'host.edit' (urlId, url, timeBetweenChecks, emailIfDown, emailAddress, emailRepeat, emailRepeatHowOften) {
+        check(urlId, String);
+        check(url, String);
+        check(timeBetweenChecks, Number);
+        check(emailIfDown, Boolean);
+        check(emailAddress, String);
 
+        if (!this.userId) {
+            throw new Meteor.Error('User is not allowed to edit URLs to the system, make sure you are logged in.');
+        }
+
+        return URLToCheck.update({ _id: urlId }, {
+            $set: {
+                url: url,
+                freqCheck: timeBetweenChecks,
+                emailIfDown: emailIfDown,
+                emailAddress: emailAddress,
+                updatedBy:  Meteor.users.findOne(this.userId).username,
+            }
+        });
     },
     // ******************************************************************
     //

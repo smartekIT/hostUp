@@ -2,31 +2,35 @@
     <div class="container">
         <h4>Enter Host to Check</h4>
         <div class="row">
-            <div class="col s6">
+            <div class="input-field col s6">
                 <label for="urlToCheck">URL To Check</label>
-                <input type="text" class="urlToCheck" id="urlToCheck" placeholder="URL To Check" />
+                <input type="text" class="urlToCheck" id="urlToCheck" value="{{#if $eq inputMode "edit"}}{{editUrl}}{{/if}}" />
             </div>
-            <div class="col s6">
+            <div class="input-field col s6">
                 <label for="checkFrequency">Check How Often</label>
-                <input type="number" class="checkFrequency" id="checkFrequency" placeholder="Check Every ? Minutes" />
+                <input type="number" class="checkFrequency" id="checkFrequency" value="{{#if $eq inputMode "edit"}}{{freq}}{{/if}}" />
             </div>
         </div>
         <div class="row">
-            <div class="col s6">
+            <div class="input-field col s6">
                 <input type="checkbox" class="emailIfDown" id="emailIfDown" />
                 <label class="label-inline" for="emailIfDown">Email if Down?</label>
             </div>
-            <div class="col s6">
+            <div class="input-field col s6">
                 <label for="emailAddress">Email Address</label>
-                <input type="email" class="emailAddress" id="emailAddress" placeholder="email@address.com">
+                <input type="email" class="emailAddress" id="emailAddress" value="{{#if $eq inputMode "edit"}}{{emailAddress}}{{/if}}" />
             </div>
         </div>
         <div class="row">
             <div class="col s6">
-                <a class="waves-effect waves-light btn cancelBtn">Cancel</a>
+                <a id="cancelHostInput" class="waves-effect waves-light btn cancelBtn">Cancel</a>
             </div>
             <div class="col s6">
-                <a class="waves-effect waves-light btn submitBtn" id="submitURL">Submit</a>
+                {{#if $eq inputMode "edit"}}
+                    <a class="waves-effect waves-light btn saveChangeBtn submitBtn" id="saveChangedURL">Save Changes</a>
+                {{else}}
+                    <a class="waves-effect waves-light btn submitBtn" id="submitURL">Submit</a>
+                {{/if}}
             </div>
         </div>
     </div>

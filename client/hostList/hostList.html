@@ -15,11 +15,11 @@
             </thead>
             <tbody>
                 {{#each hostURL}}
-                <tr class="getPingInfo">
-                    <td>{{url}}</td>
-                    <td  style="background: {{getStatus.statusColor}}">{{getStatus.status}}</td>
-                    <td>{{getStatus.lastRunOn}}</td>
-                    <td>{{getStatus.nextRunOn}}</td>
+                <tr>
+                    <td class="getPingInfo">{{url}}</td>
+                    <td class="getPingInfo"  style="background: {{getStatus.statusColor}}">{{getStatus.status}}</td>
+                    <td class="getPingInfo">{{getStatus.lastRunOn}}</td>
+                    <td class="getPingInfo">{{getStatus.nextRunOn}}</td>
                     <td>
                         <i class="fa fa-edit editHost isPointer"></i>
                         <i class="fa fa-trash deleteHost isPointer"></i>    
