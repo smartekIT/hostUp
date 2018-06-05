@@ -76,7 +76,7 @@ Meteor.methods({
                 break;
             }
             
-            Meteor.call('hostStatus.add', myURL, status, color, nextCheck);
+            Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck);
           }
         repeatChecks(nextCheck);
       });
@@ -214,7 +214,7 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
               break;
           }
 
-          Meteor.call('hostStatus.add', myURL, status, color, nextCheck);
+          Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck);
 
       }
     });

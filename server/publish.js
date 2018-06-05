@@ -12,5 +12,5 @@ Meteor.publish("hostStatuses", function() {
 });
 
 Meteor.publish("pingStatuses", function(myUrl) {
-    return PingStatus.find({ url: myUrl }, {sort: { runOn: -1 }, limit: 100 });
+    return PingStatus.find({ url: myUrl }, {sort: { runOn: -1 }, limit: 1000 });
 });

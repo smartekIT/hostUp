@@ -12,36 +12,63 @@ Template.pingResult.onRendered(function () {
 
   this.autorun(() => {
     let myUrl = Session.get("myUrl"); // will redraw the base chart if the url changes (if you don't want to do this, move this line above the autorun)
-    this.chart = HighCharts.chart('container', { // draw the base chart
-      chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false
-      },
-      title: {
-        text: "Ping Times"
-      },
-      tooltip: {
-        pointFormat: '<b>{point.y} ms</b>'
-      },
-      plotOptions: {
-        line: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            format: null,
-            style: {
-              color: (HighCharts.theme && HighCharts.theme.contrastTextColor) || 'red'
-            },
-          }
-        }
-      },
-      series: [{
-        type: 'line',
-        name: 'Days / Ping Times',
-        data: this.data // the data will eventually appear here
-      }]
+    
+    this.chart = HighCharts.chart('container', {
+        chart: {
+            zoomType: 'x'
+        },
+        title: {
+            text: 'URL Ping Times over Time'
+        },
+        subtitle: {
+            text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+        },
+        tooltip: {
+            pointFormat: '<b>{point.y} ms</b>'
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            title: {
+                text: 'Ping Times'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            area: {
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, HighCharts.getOptions().colors[0]],
+                        [1, HighCharts.Color(HighCharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                    ]
+                },
+                marker: {
+                    radius: 2
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                threshold: null
+            }
+        },
+        series: [{
+            type: 'area',
+            name: 'Days / Ping Times',
+            data: this.data
+        }]
     });
 
     if (this.subscriptionsReady()) { // Whenever the data changes or is first available...
