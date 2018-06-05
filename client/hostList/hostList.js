@@ -9,9 +9,6 @@ Template.hostList.onCreated(function() {
     this.autorun(() => {
         this.subscribe("pingStatuses", Session.get("myUrl"));
     });
-
-    Session.set("pingVis", false);
-    
 });
 
 Template.hostList.onRendered(function() {
@@ -116,7 +113,6 @@ Template.hostList.events({
 pullPings = function(pingObj) {
     let pingTimes = PingStatus.find({}).fetch();
     // console.dir(pingTimes);
-    Session.set("pingVis", true);
     setTimeout(function() {
         let modalPing = document.getElementById('modal-ping');
         modalPing.style.display = "block";
