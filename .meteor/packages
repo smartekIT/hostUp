@@ -36,7 +36,7 @@ session
 email
 
 sacha:spin
-maazalik:highcharts
+# maazalik:highcharts
 anychart:anychart
 
 accounts-base@1.4.0

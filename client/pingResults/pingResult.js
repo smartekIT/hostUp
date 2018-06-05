@@ -1,4 +1,5 @@
 import { PingStatus } from '../../imports/api/pingStatus.js';
+import HighCharts from 'highcharts';
 
 Template.pingResult.onCreated(function() {
     this.autorun(() => {
@@ -8,18 +9,29 @@ Template.pingResult.onCreated(function() {
 
 Template.pingResult.onRendered(function() {
     $('.modal').modal();
-});
 
-Template.pingResult.helpers({
-    myUrl: function() {
-        return Session.get("myUrl");
-    },
-    pingTimeChart: function() {
-        let pingTimeObj = Session.get("pingObj");
-        Materialize.updateTextFields();
+    let myUrl = Session.get("myUrl");
+    this.data = [];
+    this.autorun(() => {
+        if (this.subscriptionsReady()) { // Whenever the data changes...
+            this.data = PingStatus.find({})
+            .map(doc => {
+                return [doc.runOn, doc.pingTime]
+            });
+            // this.chart.series[0].setData(this.data);
+            var myObj = this.data
+        }
+        
+    });
 
-        // console.log(pingTimeObj);
-        return {
+    if (typeof myObj == 'undefined') {
+        setTimeout(function() {
+            console.log("Waiting for Object to be created.");
+        }, 150);
+    } else {
+        console.log(myObj);
+        
+        HighCharts.chart('container', {
             chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -39,7 +51,7 @@ Template.pingResult.helpers({
                         enabled: true,
                         format: null,
                         style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'red'
+                            color: (HighCharts.theme && HighCharts.theme.contrastTextColor) || 'red'
                         },
                     }
                 }
@@ -47,16 +59,25 @@ Template.pingResult.helpers({
             series: [{
                 type: 'line',
                 name: 'Days / Ping Times',
-                data: pingTimeObj
+                data: myObj
             }]
-        };
+        });
+    }     
+});
+
+Template.pingResult.helpers({
+    myUrl: function() {
+        return Session.get("myUrl");
     },
 });
 
 Template.pingResult.events({
     'click .pingTimeModal' (event) {
         event.preventDefault();
+        Session.set("myUrl", "");
 
+        Session.set("pingVis", false);
+        
         let thisModal = document.getElementById("modal-ping");
         thisModal.style.display = "none";
     }

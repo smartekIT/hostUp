@@ -8,7 +8,9 @@ Template.hostList.onCreated(function() {
 
     this.autorun(() => {
         this.subscribe("pingStatuses", Session.get("myUrl"));
-    })
+    });
+
+    Session.set("pingVis", false);
     
 });
 
@@ -60,6 +62,9 @@ Template.hostList.helpers({
     nextRunIs: function() {
         return Session.get("nextRunOn");
     },
+    pingVis: function() {
+        return Session.get("pingVis");
+    }
 });
 
 Template.hostList.events({
@@ -111,23 +116,9 @@ Template.hostList.events({
 pullPings = function(pingObj) {
     let pingTimes = PingStatus.find({}).fetch();
     // console.dir(pingTimes);
-    let noOfPings = pingTimes.length;
-    for (i = (noOfPings-1); i >= 0; i--) {
-        // cycle through ping times and get only times for specific days.
-
-        let pingTime = pingTimes[i].pingTime;
-        
-        let runOnUnformat = pingTimes[i].runOn;
-        let runOnFormat = moment(runOnUnformat).format('dddd hh:mm:ss a');
-
-        pingObj.push([runOnFormat, pingTime]);
-    }
-
-    Session.set("pingObj", pingObj);
+    Session.set("pingVis", true);
     setTimeout(function() {
         let modalPing = document.getElementById('modal-ping');
         modalPing.style.display = "block";
     }, 250);
-    
-
 }

@@ -7,11 +7,11 @@ import shelljs from 'shelljs';
 import { log } from 'shelljs/src/common';
 
 Meteor.methods({
-    'hosts.call' (myURL, freq) {
+    'hosts.call' (urlId, myURL, freq) {
       let now = new Date();
       let nowFormatted = moment(now).format('YYYY-MM-DD HH:mm:ss');
       let nextCheck = moment(now).add(freq, 'minutes').format('YYYY-MM-DD HH:mm:ss');
-      
+
       HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
         if (err) {
             console.log("Error:" + myURL + " " + err);
@@ -93,6 +93,7 @@ checkURLsRepeat = function() {
 
     if (typeof checkURLs != 'undefined' && checkURLs != "" && checkURLs != null) {
       for (i=0; i < checkURLs.length; i++) {
+          let urlId = checkURLs[i]._id;
           let myURL = checkURLs[i].url;
           let freq = checkURLs[i].freqCheck;
           let now = new Date();
@@ -110,8 +111,8 @@ checkURLsRepeat = function() {
 
             if (nowCompare >= nextRunISO) {
               // console.log("Should run the check for " + myURL + " now.");
-              performURLCheck(now, nowFormatted, freq, myURL);
-              pingURL(now, nowFormatted, freq, myURL);
+              performURLCheck(now, nowFormatted, freq, myURL, urlId);
+              pingURL(now, nowFormatted, freq, myURL, urlId);
               repeatChecks(minForNextCheck);
               
             } else {
@@ -141,7 +142,7 @@ repeatChecks = function(timeToRun) {
   }, timeToRun);
 }
 
-performURLCheck = function(now, nowFormatted, freq, myURL) {
+performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
   let nextCheck = moment(nowFormatted).add(freq, 'minutes').format('YYYY-MM-DD HH:mm:ss');
     // console.log("Now is: " + nowFormatted);
     // console.log(("Next Check at: " + nextCheck));
@@ -219,7 +220,7 @@ performURLCheck = function(now, nowFormatted, freq, myURL) {
     });
 }
 
-pingURL = function(now, nowFormatted, freq, url) {
+pingURL = function(now, nowFormatted, freq, url, urlId) {
 
   let splitUrl = url.split('//');
   
