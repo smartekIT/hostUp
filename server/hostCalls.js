@@ -105,9 +105,9 @@ checkURLsRepeat = function() {
 
           if (typeof currStatus != 'undefined') {
             let nextRunISO = moment(currStatus.nextRun).toISOString();
-            console.log("Now ISO is: " + nowCompare);
+            // console.log("Now ISO is: " + nowCompare);
             
-            console.log("Next run at: " + nextRunISO);
+            // console.log("Next run at: " + nextRunISO);
 
             if (nowCompare >= nextRunISO) {
               // console.log("Should run the check for " + myURL + " now.");
@@ -127,7 +127,7 @@ checkURLsRepeat = function() {
           
       }
     } else {
-      console.log("Didn't find any URLs to Check at this time.");
+      // console.log("Didn't find any URLs to Check at this time.");
     }
     
   } catch (error) {
@@ -235,24 +235,24 @@ pingURL = function(now, nowFormatted, freq, url, urlId) {
   });
 
   pingExec.stdout.on('data', Meteor.bindEnvironment(function(data) {
-    console.log("----------------------------------");
-    console.log("---- Got Data From Ping ----");
+    // console.log("----------------------------------");
+    // console.log("---- Got Data From Ping ----");
     // console.log(data);
 
     // now we'll split the output (stdout) of the command
     let dataSplit = data.split('time=');
     if (typeof dataSplit == 'undefined' || dataSplit == null || dataSplit == "") {
-      console.log("This part didn't have ping time data.");
+      // console.log("This part didn't have ping time data.");
       
     } else {
-      console.log("*****************************");
-      console.log("output from ping: ");
-      console.log("");
+      // console.log("*****************************");
+      // console.log("output from ping: ");
+      // console.log("");
       if (typeof dataSplit[1] == "undefined") {
-        console.log("dataSplit was undefined.");
+        // console.log("dataSplit was undefined.");
         
       } else {
-        console.log(dataSplit[1]);
+        // console.log(dataSplit[1]);
         let pingTimeSent = dataSplit[1];
 
         let partialPingTime = pingTimeSent.split('\n\n');
@@ -260,7 +260,7 @@ pingURL = function(now, nowFormatted, freq, url, urlId) {
         let pingTime = partialPingTime[0];
 
         // now write this info to the database for ping data
-        Meteor.call('pingCheck.add', url, pingTime);
+        Meteor.call('pingCheck.add', urlId, url, pingTime);
       }
       
     }

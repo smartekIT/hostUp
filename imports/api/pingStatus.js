@@ -12,7 +12,8 @@ PingStatus.allow({
 });
 
 Meteor.methods({
-    'pingCheck.add' (url, pingTime) {
+    'pingCheck.add' (urlId, url, pingTime) {
+        check(urlId, String);
         check(url, String);
         check(pingTime, String);
 
@@ -20,6 +21,7 @@ Meteor.methods({
         let newpingTime = parseFloat(pingTimeSplit[0]);
 
         return PingStatus.insert({
+            urlId: urlId,
             url: url,
             pingTime: newpingTime,
             runOn: new Date(),
