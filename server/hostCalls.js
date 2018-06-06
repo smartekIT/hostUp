@@ -74,11 +74,20 @@ Meteor.methods({
                 status = "Internal Server Error";
                 color = "#FF0000";
                 break;
+              default:
+                status = "Undefined Response";
+                color = "#FF0000";
             }
             
-            Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck);
+            Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck, function(err, result) {
+              if (err) {
+                console.log("Error adding hostStatus to Collection: " + err);
+              } else {
+                repeatChecks(nextCheck);
+              }
+            });
           }
-        repeatChecks(nextCheck);
+        
       });
     }
 });
@@ -94,6 +103,9 @@ checkURLsRepeat = function() {
     if (typeof checkURLs != 'undefined' && checkURLs != "" && checkURLs != null) {
       for (i=0; i < checkURLs.length; i++) {
           let urlId = checkURLs[i]._id;
+          console.log('------------------------');
+          console.log("url ID: " + urlId);
+          console.log("!!!! --------------- !!!!");
           let myURL = checkURLs[i].url;
           let freq = checkURLs[i].freqCheck;
           let now = new Date();
@@ -101,7 +113,7 @@ checkURLsRepeat = function() {
           let nowCompare = moment(nowFormatted).toISOString();
           let minForNextCheck = freq * 60 * 1000;
 
-          let currStatus = HostStatus.findOne({ url: myURL }, { sort: { runOn: -1 }});
+          let currStatus = HostStatus.findOne({ urlId: urlId }, { sort: { runOn: -1 }});
 
           if (typeof currStatus != 'undefined') {
             let nextRunISO = moment(currStatus.nextRun).toISOString();
@@ -110,24 +122,24 @@ checkURLsRepeat = function() {
             // console.log("Next run at: " + nextRunISO);
 
             if (nowCompare >= nextRunISO) {
-              // console.log("Should run the check for " + myURL + " now.");
+              console.log("Should run the check for " + myURL + " now.");
               performURLCheck(now, nowFormatted, freq, myURL, urlId);
               pingURL(now, nowFormatted, freq, myURL, urlId);
               repeatChecks(minForNextCheck);
               
             } else {
-              // console.log("Skipping run for " + myURL + " for now. It's not Time.");
+              console.log("Skipping run for " + myURL + " for now. It's not Time.");
             }
           } else {
-            // console.log("Not run yet.");
-            performURLCheck(now, nowFormatted, freq, myURL);
-            pingURL(now, nowFormatted, freq, myURL);
+            console.log("Not run yet.");
+            performURLCheck(now, nowFormatted, freq, myURL, urlId);
+            pingURL(now, nowFormatted, freq, myURL, urlId);
             repeatChecks(minForNextCheck);  
           }
           
       }
     } else {
-      // console.log("Didn't find any URLs to Check at this time.");
+      console.log("Didn't find any URLs to Check at this time.");
     }
     
   } catch (error) {
@@ -147,6 +159,10 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
     // console.log("Now is: " + nowFormatted);
     // console.log(("Next Check at: " + nextCheck));
 
+    console.log("----------------------------------------------");
+    console.log("URL ID = " + urlId);
+    console.log("!!!!!!!!  --------------------------  !!!!!!!!");
+    
     let status = "";
     let color = "";
 
@@ -212,6 +228,9 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
               status = "Internal Server Error";
               color = "#FF0000";
               break;
+            default:
+              status = "Undefined Response";
+              color = "#FF0000";
           }
 
           Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck);
@@ -223,6 +242,10 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
 pingURL = function(now, nowFormatted, freq, url, urlId) {
 
   let splitUrl = url.split('//');
+
+  console.log("-----------------------------------------------");
+  console.log("             url id: " + urlId);
+  console.log(" !!!! !!!!  ------------------------- !!!! !!!!");
   
   // console.log("splitURl is: " + splitUrl[1]);
 

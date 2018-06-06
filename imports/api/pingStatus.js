@@ -20,11 +20,14 @@ Meteor.methods({
         let pingTimeSplit = (pingTime).split(' ');
         let newpingTime = parseFloat(pingTimeSplit[0]);
 
+        let now = new Date();
+        let runNow = moment(now).format("YYYY-MM-DD HH:MM:SS");
+
         return PingStatus.insert({
             urlId: urlId,
             url: url,
             pingTime: newpingTime,
-            runOn: new Date(),
+            runOn: runNow,
         });
     },
 });

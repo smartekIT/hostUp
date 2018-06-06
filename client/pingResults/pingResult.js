@@ -25,10 +25,12 @@ Template.pingResult.onRendered(function () {
                     'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
         },
         tooltip: {
-            pointFormat: '<b>{point.y} ms</b>'
-        },
-        xAxis: {
-            type: 'datetime'
+            headerFormat: '<span style="font-size:10px">{point.x}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0;font-size:11px;">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y} ms</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
         },
         yAxis: {
             title: {

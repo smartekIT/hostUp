@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
+import { URLToCheck } from './urlsToCheck.js';
 
 export const HostStatus = new Mongo.Collection('hostStatus');
 
@@ -19,6 +20,8 @@ Meteor.methods({
         check(statusColor, String);
         check(nextRun, String);
 
+        let me = URLToCheck.findOne({ _id: urlId }).addedBy;
+
         return HostStatus.insert({
             urlId: urlId,
             url: url,
@@ -26,6 +29,7 @@ Meteor.methods({
             statusColor: statusColor,
             nextRun: nextRun,
             runOn: new Date,
+            runFor: me,
         });
     }
 });
