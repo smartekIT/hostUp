@@ -20,7 +20,11 @@ Meteor.methods({
         check(statusColor, String);
         check(nextRun, String);
 
-        let me = URLToCheck.findOne({ _id: urlId }).addedBy;
+        let mine = URLToCheck.findOne({ _id: urlId });
+        let me = mine.addedBy;
+        console.log("");
+        console.log("Run For: " + me);
+        console.log("");
 
         return HostStatus.insert({
             urlId: urlId,

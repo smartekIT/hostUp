@@ -32,7 +32,7 @@ Meteor.methods({
             freqCheck: timeBetweenChecks,
             emailIfDown: emailIfDown,
             emailAddress: emailAddress,
-            addedBy: Meteor.users.findOne(this.userId).username,
+            addedBy: Meteor.user().emails[0].address,
         });
     },
     'host.edit' (urlId, url, timeBetweenChecks, emailIfDown, emailAddress, emailRepeat, emailRepeatHowOften) {
@@ -52,7 +52,7 @@ Meteor.methods({
                 freqCheck: timeBetweenChecks,
                 emailIfDown: emailIfDown,
                 emailAddress: emailAddress,
-                updatedBy:  Meteor.users.findOne(this.userId).username,
+                updatedBy:  Meteor.user().emails[0].address,
             }
         });
     },
