@@ -22,6 +22,8 @@ Meteor.startup(() => {
   //     console.log("Error caught in server/main.js: " + error);
   // }
 
+  console.log("Server starting - should be headed to checkURLsRepeat() function.");
+  
   checkURLsRepeat();
 });
 

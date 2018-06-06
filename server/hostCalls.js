@@ -94,8 +94,8 @@ Meteor.methods({
 
 checkURLsRepeat = function() {
   try {
-    console.log("-------- --------- --------");
-    console.log("Setting up the next Check.");
+    // console.log("-------- --------- --------");
+    // console.log("Setting up the next Check.");
     let status = "";
     // code to run on server at startup
     let checkURLs = URLToCheck.find({}).fetch();
@@ -103,9 +103,9 @@ checkURLsRepeat = function() {
     if (typeof checkURLs != 'undefined' && checkURLs != "" && checkURLs != null) {
       for (i=0; i < checkURLs.length; i++) {
           let urlId = checkURLs[i]._id;
-          console.log('------------------------');
-          console.log("url ID: " + urlId);
-          console.log("!!!! --------------- !!!!");
+          // console.log('------------------------');
+          // console.log("url ID: " + urlId);
+          // console.log("!!!! --------------- !!!!");
           let myURL = checkURLs[i].url;
           let freq = checkURLs[i].freqCheck;
           let now = new Date();
@@ -129,6 +129,10 @@ checkURLsRepeat = function() {
               
             } else {
               console.log("Skipping run for " + myURL + " for now. It's not Time.");
+              console.log("Next Run is after: " + currStatus.nextRun);
+              console.log("");
+              repeatChecks(minForNextCheck);
+              
             }
           } else {
             console.log("Not run yet.");
@@ -139,7 +143,7 @@ checkURLsRepeat = function() {
           
       }
     } else {
-      console.log("Didn't find any URLs to Check at this time.");
+      // console.log("Didn't find any URLs to Check at this time.");
     }
     
   } catch (error) {
@@ -149,6 +153,8 @@ checkURLsRepeat = function() {
 }
 
 repeatChecks = function(timeToRun) {
+  let minToRun = timeToRun / 1000 / 60;
+  console.log("Run again in " + minToRun + " minutes");
   Meteor.setTimeout(function() {
     checkURLsRepeat();
   }, timeToRun);
@@ -159,9 +165,9 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
     // console.log("Now is: " + nowFormatted);
     // console.log(("Next Check at: " + nextCheck));
 
-    console.log("----------------------------------------------");
-    console.log("URL ID = " + urlId);
-    console.log("!!!!!!!!  --------------------------  !!!!!!!!");
+    // console.log("----------------------------------------------");
+    // console.log("URL ID = " + urlId);
+    // console.log("!!!!!!!!  --------------------------  !!!!!!!!");
     
     let status = "";
     let color = "";
@@ -243,9 +249,9 @@ pingURL = function(now, nowFormatted, freq, url, urlId) {
 
   let splitUrl = url.split('//');
 
-  console.log("-----------------------------------------------");
-  console.log("             url id: " + urlId);
-  console.log(" !!!! !!!!  ------------------------- !!!! !!!!");
+  // console.log("-----------------------------------------------");
+  // console.log("             url id: " + urlId);
+  // console.log(" !!!! !!!!  ------------------------- !!!! !!!!");
   
   // console.log("splitURl is: " + splitUrl[1]);
 

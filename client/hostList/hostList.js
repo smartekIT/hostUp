@@ -20,7 +20,7 @@ Template.hostList.helpers({
         return URLToCheck.find({});
     },
     getStatus: function() {
-        try {
+        // try {
             let url = this.url;
 
             let thisHostStatus = {};
@@ -49,9 +49,9 @@ Template.hostList.helpers({
             thisHostStatus.statusColor = myHostStatus.statusColor;
 
             return thisHostStatus;
-        } catch (error) {
-            console.log("Error in getStatus call: " + error);
-        }
+        // } catch (error) {
+        //     console.log("Error in getStatus call: " + error);
+        // }
     },
     runOnDate: function() {
         return Session.get("lastRunOn");
