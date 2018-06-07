@@ -25,7 +25,7 @@ Template.pingResult.onRendered(function () {
                     'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
         },
         tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.x}</span><table>',
+            headerFormat: '<span style="font-size:10px">Date / Ping Time</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0;font-size:11px;">{series.name}: </td>' +
             '<td style="padding:0"><b>{point.y} ms</b></td></tr>',
             footerFormat: '</table>',

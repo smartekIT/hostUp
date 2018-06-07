@@ -15,6 +15,13 @@ Meteor.methods({
       HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
         if (err) {
             console.log("Error:" + myURL + " " + err);
+            Meteor.call('hostStatus.add', urlId, myURL, "Error - Down", "#FF0000", nextCheck, function(err, result) {
+              if (err) {
+                console.log("Error adding hostStatus to Collection: " + err);
+              } else {
+                repeatChecks(nextCheck);
+              }
+            });
         } else {
             // console.dir(result);
             switch (result.statusCode) {
@@ -174,7 +181,13 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
 
     HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
       if (err) {
-          console.log("Error:" + myURL + " " + err);
+          console.log("Error:" + myURL + " " + err);Meteor.call('hostStatus.add', urlId, myURL, "Error - Down", "#FF0000", nextCheck, function(err, result) {
+            if (err) {
+              console.log("Error adding hostStatus to Collection: " + err);
+            } else {
+              repeatChecks(nextCheck);
+            }
+          });
       } else {
           // console.dir(result);
           switch (result.statusCode) {
