@@ -22,16 +22,27 @@ Meteor.methods({
 
         let mine = URLToCheck.findOne({ _id: urlId });
         let me = mine.addedBy;
-        console.log("");
-        console.log("Run For: " + me);
-        console.log("");
 
+        let lastEntry = HostStatus.findOne({ urlId: urlId }, { $sort: { runOn: -1 }, limit: 1 });
+
+        if (typeof lastEntry != 'undefined' && lastEntry != "" && lastEntry != null) {
+            let lastEntryId = lastEntry._id;
+            // update the last finding to be not active
+            HostStatus.update({ _id: lastEntryId }, {
+                $set: {
+                    active: false,
+                }
+            });
+        }
+
+        // add the new findings
         return HostStatus.insert({
             urlId: urlId,
             url: url,
             status: status,
             statusColor: statusColor,
             nextRun: nextRun,
+            active: true,
             runOn: new Date,
             runFor: me,
         });

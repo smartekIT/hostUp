@@ -22,6 +22,7 @@ shell-server@0.3.1            # Server-side component of the `meteor shell` comm
 http
 # noahvlncrt:milligram
 materialize:materialize
+meteorhacks:aggregate
 
 raix:handlebar-helpers
 kadira:flow-router

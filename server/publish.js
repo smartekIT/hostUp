@@ -8,7 +8,40 @@ Meteor.publish("urlChecks", function() {
 });
 
 Meteor.publish("hostStatuses", function() {
-    return HostStatus.find({});
+    let myUser = Meteor.user().emails[0].address;
+    console.log("********************************************");
+    console.log("********************************************");
+    console.log("");
+    console.log("My User aggregate is: " + myUser);
+    console.log("");
+    console.log("********************************************");
+    console.log("********************************************");
+    
+    return HostStatus.find({ runFor: myUser, active: true });
+
+    // var pipeline = [
+    //     {
+    //         $group: {
+    //             _id: "$urlId",
+    //             runOn: {$last: '$runOn'},
+    //         }
+    //     },
+    //     {  $project: {
+    //             "urlId": "$urlId",
+    //             "status": "$status",
+    //             "statusColor": "$statusColor",
+    //             "runOn": "$runOn",
+    //             "nextRun": "$nextRun",
+    //             "runFor": "$runFor",
+    //         }
+    //     },
+    //     {    $sort: {
+    //             "runOn": -1
+    //         }
+    //     }
+    // ]
+    // var result = HostStatus.aggregate(pipeline);
+    // return result;
 });
 
 Meteor.publish("pingStatuses", function(myUrl) {
