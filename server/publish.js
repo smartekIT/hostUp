@@ -4,7 +4,9 @@ import { HostStatus } from '../imports/api/hostStatus.js';
 import { PingStatus } from '../imports/api/pingStatus.js';
 
 Meteor.publish("urlChecks", function() {
-    return URLToCheck.find({});
+    let me = Meteor.user().emails[0].address;
+
+    return URLToCheck.find({ addedBy: me });
 });
 
 Meteor.publish("hostStatuses", function() {
@@ -19,31 +21,16 @@ Meteor.publish("hostStatuses", function() {
     
     return HostStatus.find({ runFor: myUser, active: true });
 
-    // var pipeline = [
-    //     {
-    //         $group: {
-    //             _id: "$urlId",
-    //             runOn: {$last: '$runOn'},
-    //         }
-    //     },
-    //     {  $project: {
-    //             "urlId": "$urlId",
-    //             "status": "$status",
-    //             "statusColor": "$statusColor",
-    //             "runOn": "$runOn",
-    //             "nextRun": "$nextRun",
-    //             "runFor": "$runFor",
-    //         }
-    //     },
-    //     {    $sort: {
-    //             "runOn": -1
-    //         }
-    //     }
-    // ]
-    // var result = HostStatus.aggregate(pipeline);
-    // return result;
 });
 
 Meteor.publish("pingStatuses", function(myUrl) {
     return PingStatus.find({ url: myUrl }, {sort: { runOn: -1 }, limit: 1000 });
+});
+
+Meteor.publish("configSettings", function() {
+    let isAdmin = Roles.userIsInRole(this.userId, 'Admin');
+
+    if (isAdmin) {
+        return ConfigColl.find({});
+    }
 });

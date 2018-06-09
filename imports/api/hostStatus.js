@@ -23,18 +23,6 @@ Meteor.methods({
         let mine = URLToCheck.findOne({ _id: urlId });
         let me = mine.addedBy;
 
-        let lastEntry = HostStatus.findOne({ urlId: urlId }, { $sort: { runOn: -1 }, limit: 1 });
-
-        if (typeof lastEntry != 'undefined' && lastEntry != "" && lastEntry != null) {
-            let lastEntryId = lastEntry._id;
-            // update the last finding to be not active
-            HostStatus.update({ _id: lastEntryId }, {
-                $set: {
-                    active: false,
-                }
-            });
-        }
-
         // add the new findings
         return HostStatus.insert({
             urlId: urlId,
@@ -46,5 +34,14 @@ Meteor.methods({
             runOn: new Date,
             runFor: me,
         });
+    },
+    'hostStatus.updateActive' (urlId) {
+        check(urlId, String);
+
+        return HostStatus.update({}, {
+            $set: {
+                active: false,
+            }
+        }, { multi: true });
     }
 });

@@ -25,7 +25,7 @@ Template.hostList.helpers({
 
             let thisHostStatus = {};
 
-            let myHostStatus = HostStatus.findOne({ "url": url }, { sort: { "runOn": -1 }});
+            let myHostStatus = HostStatus.findOne({ "url": url });
             let runOnDate = myHostStatus.runOn;
             if (typeof runOnDate != 'undefined' && runOnDate != "" && runOnDate != null) {
                 var momentOnDate = moment(runOnDate).format("MM/DD/YYYY HH:mm:ss");

@@ -12,15 +12,13 @@ ConfigColl.allow({
 });
 
 Meteor.methods({
-    'new.config' (emailHost, emailUser, emailPassword, emailSmtpServer, emailSmtpPort, minTimeFreeUser, maxNoOfSitesFree, allowChooseFreq, defaultFreq) {
+    'new.config' (emailHost, emailUser, emailPassword, emailSmtpServer, emailSmtpPort, maxNoOfSitesFree, defaultFreq) {
         check(emailHost, String);
         check(emailUser, String);
         check(emailPassword, String);
         check(emailSmtpServer, String);
         check(emailSmtpPort, String);
-        check(minTimeFreeUser, Number);
         check(maxNoOfSitesFree, Number);
-        check(allowChooseFreq, Boolean);
         check(defaultFreq, Number);
 
         if (!this.userId) {
@@ -33,15 +31,13 @@ Meteor.methods({
             emailPassword: emailPassword,
             emailSmtpServer: emailSmtpServer,
             emailSmtpPort: emailSmtpPort,
-            minTimeFreeUser: minTimeFreeUser,
             maxNoOfSitesFree: maxNoOfSitesFree,
-            allowChooseFreq: allowChooseFreq,
             defaultFreq: defaultFreq,
             addedOn: new Date(),
             addedBy: Meteor.user().emails[0].address,
         });
     },
-    'edit.config' (configId, emailHost, emailUser, emailPassword, emailSmtpServer,emailSmtpPort, minTimeFreeUser, maxNoOfSitesFree, allowChooseFreq, defaultFreq) {
+    'edit.config' (configId, emailHost, emailUser, emailPassword, emailSmtpServer, emailSmtpPort, maxNoOfSitesFree, defaultFreq) {
 
     },
     'delete.config' (collId) {
