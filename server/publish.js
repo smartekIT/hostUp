@@ -11,13 +11,6 @@ Meteor.publish("urlChecks", function() {
 
 Meteor.publish("hostStatuses", function() {
     let myUser = Meteor.user().emails[0].address;
-    console.log("********************************************");
-    console.log("********************************************");
-    console.log("");
-    console.log("My User aggregate is: " + myUser);
-    console.log("");
-    console.log("********************************************");
-    console.log("********************************************");
     
     return HostStatus.find({ runFor: myUser, active: true });
 

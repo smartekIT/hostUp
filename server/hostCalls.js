@@ -23,6 +23,7 @@ Meteor.methods({
           // first let's handle issues when the http request responds with an error
           // we still need to write this to the log so we can pull it and display it to the user
           //
+          
             console.log("Error:" + myURL + " " + err);
             Meteor.call('hostStatus.add', urlId, myURL, "Error - Down", "#FF0000", nextCheck, function(err, result) {
               if (err) {
@@ -40,6 +41,7 @@ Meteor.methods({
           // to the site, and figure out which response we got.  We assign a status and color
           // to display to our users.
           //
+
             // console.dir(result);
             switch (result.statusCode) {
               case 200:
@@ -107,6 +109,7 @@ Meteor.methods({
             // since this is our first call to a newly entered URL we just call our insert function
             // to the Mongo DB below, no need to check for existing entries.
             //
+
             Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck, function(err, result) {
               if (err) {
                 console.log("Error adding hostStatus to Collection: " + err);
@@ -171,6 +174,7 @@ checkURLsRepeat = function() {
 
           if (typeof currStatus != 'undefined') {
             let nextRunISO = moment(currStatus.nextRun).toISOString();
+            
             // console.log("Now ISO is: " + nowCompare);
             
             // console.log("Next run at: " + nextRunISO);
@@ -180,9 +184,11 @@ checkURLsRepeat = function() {
               // ****    basically if the current time is past when the next check should happen
               // ****    we will run the next check by calling the appropriate functions below
               //
+
               console.log("");
               console.log("Should run the check for " + myURL + " now.");
               console.log("");
+              
               performURLCheck(now, nowFormatted, freq, myURL, urlId);
               pingURL(now, nowFormatted, freq, myURL, urlId);
               repeatChecks(freq);
@@ -192,6 +198,7 @@ checkURLsRepeat = function() {
               // ****    if the next check isn't due yet, we just move on and set a timer with the 
               // ****    minutes for the next check as a passed variable.
               //
+              
               console.log("");
               console.log("Skipping run for " + myURL + " for now. It's not Time.");
               console.log("Next Run is after: " + currStatus.nextRun);
@@ -369,7 +376,7 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
           //
           if (currHostStatus != 0) {
             console.log("");
-            console.log("Found Host Count Active to not be zero!");
+            console.log("Found Host Count Active to NOT be zero!");
             console.log("");
             
             Meteor.call('hostStatus.updateActive', urlId, function(err, result){
@@ -380,32 +387,44 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
 
                 console.log("!!!!!! -------------- !!!!!! ------------- !!!!!! ---------------");
                 console.log("Re-count found Active hosts for url " + myURL + " are: " + reCheck);
-                console.log("");
+                console.log(" ");
 
                 if (reCheck != 0) {
+
+                  console.log("!!!!!! -------------- !!!!!! ------------- !!!!!! ---------------");
+                  console.log("Re-count Shows - Stil NOT Zero!");
+                  console.log("");
+
                   Meteor.call('hostStatus.updateActive', urlId, function(err, result){
                     if (err) {
                       console.log("Error updating host status: " + err);
                     } else {
+
+                      console.log("!!!!!! -------------- !!!!!! ------------- !!!!!! ---------------");
+                      console.log("--- After 3rd try - Finally Adding new Active Info for " + myURL);
+                      console.log("");
+                      
                       Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck, function(err, result) {
                         if (err) {
                           console.log("Error adding host status: " + err);
-                        } else {
-                          // console.log("Success.");
+                        } else {s
+                          console.log("--- *** --- Active Entry should have been made for " + myURL);
+                          console.log(" ");
                         }
                       });
                     }
                 });
                } else {
                   console.log("!!!!!! -------------- !!!!!! ------------- !!!!!! ---------------");
-                  console.log("Recheck was Zero!");
+                  console.log("Recheck was Zero! Adding new entry for " + myURL);
                   console.log("");
 
                   Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck, function(err, result) {
                     if (err) {
                       console.log("Error adding host status: " + err);
                     } else {
-                      // console.log("Success.");
+                      console.log("--- *** --- Active Entry should have been made for " + myURL);
+                      console.log("");
                     }
                   });
                 }
@@ -413,12 +432,17 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
               }
             });
           } else {
+
             console.log("!!!!!! -------------- !!!!!! ------------- !!!!!! ---------------");
-            console.log("All Host Entries were Non-Active Already!");
+            console.log("All Host Entries were Non-Active Already! Adding new site info.");
             console.log("");
+
             Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck, function(err, result) {
               if (err) {
                 console.log("Error adding Status Check for Host: " + err);
+              } else {
+                console.log("--- *** --- Active Entry should have been made for " + myURL);
+                console.log("");
               }
             });
           }

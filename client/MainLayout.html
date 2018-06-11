@@ -8,5 +8,8 @@
     {{/if}}
     </div>
     {{> snackbar}}
-   {{> loginModal}}
+    {{> loginModal}}
+    {{#if isInRole 'Admin'}}
+        {{> needConfig}}
+    {{/if}}
 </template>

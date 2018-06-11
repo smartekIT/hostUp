@@ -6,16 +6,14 @@
                 <label for="urlToCheck">URL To Check</label>
                 <input type="text" class="urlToCheck" id="urlToCheck" value="{{#if $eq inputMode "edit"}}{{editUrl}}{{/if}}" />
             </div>
-            <div class="input-field col s6">
-                <label for="checkFrequency">Check How Often</label>
-                <input type="number" class="checkFrequency" id="checkFrequency" value="{{#if $eq inputMode "edit"}}{{freq}}{{/if}}" />
-            </div>
         </div>
         <div class="row">
             <div class="col s6">
                 <input type="checkbox" class="emailIfDown" id="emailIfDown" />
                 <label class="label-inline" for="emailIfDown">Email if Down?</label>
             </div>
+        </div>
+        <div class="row">
             <div class="input-field col s6">
                 <label for="emailAddress">Email Address</label>
                 <input type="email" class="emailAddress" id="emailAddress" value="{{#if $eq inputMode "edit"}}{{emailAddress}}{{/if}}" />

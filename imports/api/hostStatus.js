@@ -38,7 +38,7 @@ Meteor.methods({
     'hostStatus.updateActive' (urlId) {
         check(urlId, String);
 
-        return HostStatus.update({}, {
+        return HostStatus.update({ urlId: urlId, active: true }, {
             $set: {
                 active: false,
             }

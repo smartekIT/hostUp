@@ -22,10 +22,11 @@ Template.hostList.helpers({
     getStatus: function() {
         // try {
             let url = this.url;
+            let urlId = this._id;
 
             let thisHostStatus = {};
 
-            let myHostStatus = HostStatus.findOne({ "url": url });
+            let myHostStatus = HostStatus.findOne({ "urlId": urlId }, {sort: { runOn: -1 }});
             let runOnDate = myHostStatus.runOn;
             if (typeof runOnDate != 'undefined' && runOnDate != "" && runOnDate != null) {
                 var momentOnDate = moment(runOnDate).format("MM/DD/YYYY HH:mm:ss");
@@ -59,9 +60,6 @@ Template.hostList.helpers({
     nextRunIs: function() {
         return Session.get("nextRunOn");
     },
-    pingVis: function() {
-        return Session.get("pingVis");
-    }
 });
 
 Template.hostList.events({
