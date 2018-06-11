@@ -23,7 +23,7 @@ Meteor.methods({
           // first let's handle issues when the http request responds with an error
           // we still need to write this to the log so we can pull it and display it to the user
           //
-          
+
             console.log("Error:" + myURL + " " + err);
             Meteor.call('hostStatus.add', urlId, myURL, "Error - Down", "#FF0000", nextCheck, function(err, result) {
               if (err) {
@@ -407,7 +407,7 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
                       Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck, function(err, result) {
                         if (err) {
                           console.log("Error adding host status: " + err);
-                        } else {s
+                        } else {
                           console.log("--- *** --- Active Entry should have been made for " + myURL);
                           console.log(" ");
                         }
