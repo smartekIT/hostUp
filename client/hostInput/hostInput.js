@@ -1,7 +1,9 @@
 import { URLToCheck } from '../../imports/api/urlsToCheck.js';
+import { ConfigColl } from '../../imports/api/configColl.js';
 
 Template.hostInput.onCreated(function() {
     this.subscribe("urlChecks");
+    this.subscribe("configSettings");
 });
 
 Template.hostInput.onRendered(function() {
@@ -26,7 +28,19 @@ Template.hostInput.helpers({
     },
     inputMode: function() {
         return Session.get("inputMode");
-    }
+    },
+    canAddSite: function() {
+        let config = ConfigColl.find({}).fetch();
+        let maxSitesUnPaid = config[0].maxNoOfSitesFree;
+        
+        let myNoSites = URLToCheck.find().count();
+
+        if (myNoSites >= maxSitesUnPaid) {
+            return false;
+        } else {
+            return true;
+        }
+    },
 });
 
 Template.hostInput.events({

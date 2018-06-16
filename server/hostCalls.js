@@ -11,11 +11,13 @@ Meteor.methods({
     'hosts.call' (urlId, myURL, freq) {
       let now = new Date();
       let nowFormatted = moment(now).format('YYYY-MM-DD HH:mm:ss');
-      let nextCheck = moment(now).add(freq, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+      
 
       let config = ConfigColl.findOne({});
 
       var timeToRun = config.defaultFreq;
+
+      let nextCheck = moment(now).add(timeToRun, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 
       HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
         if (err) {
@@ -32,7 +34,7 @@ Meteor.methods({
                 //
                 // if it's successfully written - call our timer function to start the timer
                 //
-                repeatChecks(nextCheck);
+                repeatChecks(timeToRun);
               }
             });
         } else {
@@ -114,7 +116,7 @@ Meteor.methods({
               if (err) {
                 console.log("Error adding hostStatus to Collection: " + err);
               } else {
-                repeatChecks(nextCheck);
+                repeatChecks(timeToRun);
               }
             });
           }
@@ -189,7 +191,7 @@ checkURLsRepeat = function() {
               console.log("Should run the check for " + myURL + " now.");
               console.log("");
               
-              performURLCheck(now, nowFormatted, freq, myURL, urlId);
+              performURLCheck(now, nowFormatted,freq, myURL, urlId);
               pingURL(now, nowFormatted, freq, myURL, urlId);
               repeatChecks(freq);
               
@@ -270,7 +272,13 @@ repeatChecks = function(timeToRun) {
 // I'll tackle that later.
 //
 performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
-  let nextCheck = moment(nowFormatted).add(freq, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+
+  let config = ConfigColl.findOne({});
+
+  var timeToRun = config.defaultFreq;
+
+
+  let nextCheck = moment(nowFormatted).add(timeToRun, 'minutes').format('YYYY-MM-DD HH:mm:ss');
     // console.log("Now is: " + nowFormatted);
     // console.log(("Next Check at: " + nextCheck));
 
@@ -294,7 +302,7 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
             if (err) {
               console.log("Error adding hostStatus to Collection: " + err);
             } else {
-              repeatChecks(freq);
+              repeatChecks(timeToRun);
             }
           });
       } else {
@@ -455,7 +463,7 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
 // over time.  In the UI right now I display the last 1000 pings to give a feel for how rimes are
 // over time
 //
-pingURL = function(now, nowFormatted, freq, url, urlId) {
+pingURL = function(now, nowFormatted, timeToRun, url, urlId) {
 
   //
   // I have to do some fun stuff here.  We get the full URL then split off the 

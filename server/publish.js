@@ -24,6 +24,10 @@ Meteor.publish("configSettings", function() {
     let isAdmin = Roles.userIsInRole(this.userId, 'Admin');
 
     if (isAdmin) {
+        console.log("Is ADmin");
         return ConfigColl.find({});
+    } else {
+        console.log("Is Not Admin!!!");
+        return ConfigColl.find({}, { _id: 0, maxNoOfSitesFree: 1, defaultFreq: 1 });
     }
 });

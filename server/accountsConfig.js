@@ -1,6 +1,6 @@
 var postSignUp = function(userId, info) {
     if (Meteor.users.find().count() > 1) {
-        Roles.addUsersToRoles(userId, 'user');
+        Roles.addUsersToRoles(userId, 'nonPaidUser');
     } else if (Meteor.users.find().count() === 1){
         Roles.addUsersToRoles(userId, 'Admin');
     }
