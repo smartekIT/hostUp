@@ -30,10 +30,17 @@ Template.hostInput.helpers({
         return Session.get("inputMode");
     },
     canAddSite: function() {
-        let config = ConfigColl.find({}).fetch();
-        let maxSitesUnPaid = config[0].maxNoOfSitesFree;
+        let config = ConfigColl.findOne({});
+        let maxSitesUnPaid = config.maxNoOfSitesFree;
+        // console.log("---------------------------");
+        // console.log("Config is:");
+        // console.dir(config);
+        // console.log("---------------------------");
         
         let myNoSites = URLToCheck.find().count();
+        // console.log("My No of Sites is: " + myNoSites);
+        // console.log("Max No of Sites is: " + maxSitesUnPaid);
+        
 
         if (myNoSites >= maxSitesUnPaid) {
             return false;
@@ -137,5 +144,10 @@ Template.hostInput.events({
             $('#emailIfDown').prop('checked', false);
             $("#emailAddress").val("");
         }
+    },
+    'click #subscribeButton' (event) {
+        event.preventDefault();
+
+        console.log("Subscribe Clicked.");
     }
 });

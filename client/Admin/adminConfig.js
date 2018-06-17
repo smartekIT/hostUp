@@ -47,9 +47,40 @@ Template.adminConfig.events({
         Meteor.call('new.config', emailHost, emailUser, emailPass, emailServer, emailPort, maxNoSites, defaultFreq, function(err, result) {
             if (err) {
                 console.log("Error adding Cofnig to db: " + err);
+                showSnackbar("Error Saving Configuration Settings.", "red");
             } else {
                 showSnackbar("Successfully Added Configuration!", "green");
             }
         });
-    }
+    },
+    'click #saveChangedConfig' (event) {
+        event.preventDefault();
+
+        let maxNo = $("#maxNoOfSitesPerUser").val();
+        let maxNoSites = parseInt(maxNo);
+        let freq = $("#standardFreq").val();
+        let defaultFreq = parseInt(freq);
+        let emailHost = $("#emailHost").val();
+        let emailUser = $("#emailUser").val();
+        let emailPass = $("#emailPass").val();
+        let emailServer = $("#emailServer").val();
+        let emailPort = $("#emailPort").val();
+
+        if (maxNoSites == "" || maxNoSites == null) {
+            maxNoSties = 5;
+        }
+
+        if (defaultFreq == "" || defaultFreq == null) {
+            defaultFreq = 20;
+        }
+
+        Meteor.call('edit.config', emailHost, emailUser, emailPass, emailServer, emailPort, maxNoSites, defaultFreq, function(err, result) {
+            if (err) {
+                console.log("Error adding Cofnig to db: " + err);
+                showSnackbar("Error Updating Configuration Settings.", "red");
+            } else {
+                showSnackbar("Successfully Added Configuration!", "green");
+            }
+        });
+    },
 });

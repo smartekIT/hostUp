@@ -1,73 +1,84 @@
 <template name="hostInput">
     <div class="container">
         <h4>Enter Host to Check</h4>
-        {{#if isInRole 'PaidUser,Admin'}}
-        <div class="row">
-            <div class="input-field col s6">
-                <label for="urlToCheck">URL To Check</label>
-                <input type="text" class="urlToCheck" id="urlToCheck" value="{{#if $eq inputMode "edit"}}{{editUrl}}{{/if}}" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s6">
-                <input type="checkbox" class="emailIfDown" id="emailIfDown" />
-                <label class="label-inline" for="emailIfDown">Email if Down?</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s6">
-                <label for="emailAddress">Email Address</label>
-                <input type="email" class="emailAddress" id="emailAddress" value="{{#if $eq inputMode "edit"}}{{emailAddress}}{{/if}}" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s6">
-                <a id="cancelHostInput" class="waves-effect waves-light btn cancelBtn">Cancel</a>
-            </div>
-            <div class="col s6">
-                {{#if $eq inputMode "edit"}}
-                    <a class="waves-effect waves-light btn saveChangeBtn submitBtn" id="saveChangedURL">Save Changes</a>
-                {{else}}
-                    <a class="waves-effect waves-light btn submitBtn" id="submitURL">Submit</a>
-                {{/if}}
-            </div>
-        </div>
-        {{else}}
-            {{#if $eq canAddSite true}}
-                <div class="row">
-                    <div class="input-field col s6">
-                        <label for="urlToCheck">URL To Check</label>
-                        <input type="text" class="urlToCheck" id="urlToCheck" value="{{#if $eq inputMode "edit"}}{{editUrl}}{{/if}}" />
-                    </div>
+        {{#if Template.subscriptionsReady}}
+            {{#if isInRole 'PaidUser,Admin'}}
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="urlToCheck">URL To Check</label>
+                    <input type="text" class="urlToCheck" id="urlToCheck" value="{{#if $eq inputMode "edit"}}{{editUrl}}{{/if}}" />
                 </div>
-                <div class="row">
-                    <div class="col s6">
-                        <input type="checkbox" class="emailIfDown" id="emailIfDown" />
-                        <label class="label-inline" for="emailIfDown">Email if Down?</label>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <input type="checkbox" class="emailIfDown" id="emailIfDown" />
+                    <label class="label-inline" for="emailIfDown">Email if Down?</label>
                 </div>
-                <div class="row">
-                    <div class="input-field col s6">
-                        <label for="emailAddress">Email Address</label>
-                        <input type="email" class="emailAddress" id="emailAddress" value="{{#if $eq inputMode "edit"}}{{emailAddress}}{{/if}}" />
-                    </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="emailAddress">Email Address</label>
+                    <input type="email" class="emailAddress" id="emailAddress" value="{{#if $eq inputMode "edit"}}{{emailAddress}}{{/if}}" />
                 </div>
-                <div class="row">
-                    <div class="col s6">
-                        <a id="cancelHostInput" class="waves-effect waves-light btn cancelBtn">Cancel</a>
-                    </div>
-                    <div class="col s6">
-                        {{#if $eq inputMode "edit"}}
-                            <a class="waves-effect waves-light btn saveChangeBtn submitBtn" id="saveChangedURL">Save Changes</a>
-                        {{else}}
-                            <a class="waves-effect waves-light btn submitBtn" id="submitURL">Submit</a>
-                        {{/if}}
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <a id="cancelHostInput" class="waves-effect waves-light btn cancelBtn">Cancel</a>
                 </div>
+                <div class="col s6">
+                    {{#if $eq inputMode "edit"}}
+                        <a class="waves-effect waves-light btn saveChangeBtn submitBtn" id="saveChangedURL">Save Changes</a>
+                    {{else}}
+                        <a class="waves-effect waves-light btn submitBtn" id="submitURL">Submit</a>
+                    {{/if}}
+                </div>
+            </div>
             {{else}}
-                <h5>Over Limit</h5>
-                <p>You have reached your limit of free sites to have checked.  You can remove this limit by suscribing to the premium service.</p>
+                {{#if $eq canAddSite true}}
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <label for="urlToCheck">URL To Check</label>
+                            <input type="text" class="urlToCheck" id="urlToCheck" value="{{#if $eq inputMode "edit"}}{{editUrl}}{{/if}}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">
+                            <input type="checkbox" class="emailIfDown" id="emailIfDown" />
+                            <label class="label-inline" for="emailIfDown">Email if Down?</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <label for="emailAddress">Email Address</label>
+                            <input type="email" class="emailAddress" id="emailAddress" value="{{#if $eq inputMode "edit"}}{{emailAddress}}{{/if}}" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">
+                            <a id="cancelHostInput" class="waves-effect waves-light btn cancelBtn">Cancel</a>
+                        </div>
+                        <div class="col s6">
+                            {{#if $eq inputMode "edit"}}
+                                <a class="waves-effect waves-light btn saveChangeBtn submitBtn" id="saveChangedURL">Save Changes</a>
+                            {{else}}
+                                <a class="waves-effect waves-light btn submitBtn" id="submitURL">Submit</a>
+                            {{/if}}
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="row red lighten-2">
+                        <h5>Over Limit</h5>
+                        <p>You have reached your limit of free sites to have checked.  You can remove this limit by suscribing to the premium service.</p>
+                    </div>     
+                    <div class="row">
+                        <div class="col s12 center-align">
+                            <a class="waves-effect waves-light btn subscribe center" id="subscribeButton">Subscribe to Premium</a>
+                        </div>
+                    </div>
+                {{/if}}
             {{/if}}
+        {{else}}
+            {{> spinner}}
         {{/if}}
     </div>
 </template>
