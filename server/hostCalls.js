@@ -15,7 +15,12 @@ Meteor.methods({
 
       let config = ConfigColl.findOne({});
 
-      var timeToRun = config.defaultFreq;
+      if (typeof config == 'undefinte' || config == null || config == "") {
+        var timeToRun = 30;
+      } else {
+        var timeToRun = config.defaultFreq;
+      }
+      
 
       let nextCheck = moment(now).add(timeToRun, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 
@@ -275,8 +280,11 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
 
   let config = ConfigColl.findOne({});
 
-  var timeToRun = config.defaultFreq;
-
+  if (typeof config == 'undefinte' || config == null || config == "") {
+    var timeToRun = 30;
+  } else {
+    var timeToRun = config.defaultFreq;
+  }
 
   let nextCheck = moment(nowFormatted).add(timeToRun, 'minutes').format('YYYY-MM-DD HH:mm:ss');
     // console.log("Now is: " + nowFormatted);
