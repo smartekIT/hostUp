@@ -11,7 +11,7 @@ Meteor.methods({
     'hosts.call' (urlId, myURL, freq) {
       let now = new Date();
       let nowFormatted = moment(now).format('YYYY-MM-DD HH:mm:ss');
-      
+
 
       let config = ConfigColl.findOne({});
 
@@ -20,7 +20,7 @@ Meteor.methods({
       } else {
         var timeToRun = config.defaultFreq;
       }
-      
+
 
       let nextCheck = moment(now).add(timeToRun, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 
@@ -111,7 +111,7 @@ Meteor.methods({
                 status = "Undefined Response";
                 color = "#FF0000";
             }
-            
+
             //
             // since this is our first call to a newly entered URL we just call our insert function
             // to the Mongo DB below, no need to check for existing entries.
@@ -144,7 +144,7 @@ checkURLsRepeat = function() {
   try {
 
     let status = "";
-    
+
     //
     // First let's pull back all of the URLs we need to check
     //
@@ -172,7 +172,7 @@ checkURLsRepeat = function() {
           // console.log("url ID: " + urlId);
           // console.log("!!!! --------------- !!!!");
           let myURL = checkURLs[i].url;
-          let freq = checkURLs[i].freqCheck;
+          let freq = checkURLs[i].freqCheck; // this is the frequency to check in minutes.
           let now = new Date();
           let nowFormatted = moment(now).format('YYYY-MM-DD HH:mm:ss');
           let nowCompare = moment(nowFormatted).toISOString();
@@ -180,14 +180,17 @@ checkURLsRepeat = function() {
           let currStatus = HostStatus.findOne({ urlId: urlId }, { sort: { runOn: -1 }});
 
           if (typeof currStatus != 'undefined') {
+	    // we are checking to see if the current status isn't set (thus a new url
+	    // hasn't been checked yet). If not, then we get the next date / time a 
+	    // a check should be run.
             let nextRunISO = moment(currStatus.nextRun).toISOString();
-            
+
             // console.log("Now ISO is: " + nowCompare);
-            
+
             // console.log("Next run at: " + nextRunISO);
 
             if (nowCompare >= nextRunISO) {
-              // 
+              //
               // ****    basically if the current time is past when the next check should happen
               // ****    we will run the next check by calling the appropriate functions below
               //
@@ -195,28 +198,41 @@ checkURLsRepeat = function() {
               console.log("");
               console.log("Should run the check for " + myURL + " now.");
               console.log("");
-              
+	      
+	      // check the URL and see if it's up.
               performURLCheck(now, nowFormatted,freq, myURL, urlId);
+
+	      // check the ping of the URL
               pingURL(now, nowFormatted, freq, myURL, urlId);
+
+	      // now set a timer to recheck things.
               repeatChecks(freq);
-              
+
             } else {
               //
-              // ****    if the next check isn't due yet, we just move on and set a timer with the 
+              // ****    if the next check isn't due yet, we just move on and set a timer with the
               // ****    minutes for the next check as a passed variable.
               //
-              
+
               console.log("");
               console.log("Skipping run for " + myURL + " for now. It's not Time.");
               console.log("Next Run is after: " + currStatus.nextRun);
               console.log("");
+              let next = new Date(nextRunISO);
+              let compare = new Date(nowCompare);
+              let nextRunInMs = next - compare;
+              let nextRunIn = nextRunInMs / 1000 / 60;
+              // just a change
+              console.log("**********************************************");
+              console.log("Next Run will be at: " + nextRunIn +" min");
+              console.log("**********************************************");
 
               //
               // ****    I'm commenting out the repeatChecks call here - it should technically already
               // ****    be set, as this branch of the if is reached if another timer is up, but not
               // ****    the one for this URL specifically.
               //
-              // repeatChecks(freq);
+              // repeatChecks(nextRunIn);
             }
           } else {
             //
@@ -229,7 +245,7 @@ checkURLsRepeat = function() {
             console.log("");
             performURLCheck(now, nowFormatted, freq, myURL, urlId);
             pingURL(now, nowFormatted, freq, myURL, urlId);
-            repeatChecks(freq);  
+            repeatChecks(freq);
           }
       }
     } else {
@@ -237,13 +253,13 @@ checkURLsRepeat = function() {
       // you can uncomment this comment (or any for that matter) to get some logging
       // if you aren't getting what you expect.
       //
-      // console.log("Didn't find any URLs to Check at this time.");
+      console.log("Didn't find any URLs to Check at this time.");
     }
-    
+
   } catch (error) {
     console.log("Error Occurred server/hostCalls.js line 129: " + error);
   }
-  
+
 }
 
 // *******************************************************************************************
@@ -261,11 +277,13 @@ repeatChecks = function(timeToRun) {
     let defaultTime = 20;
     timeRun = defaultTime * 1000 * 60;
   } else {
-    let minToRun = timeToRun / 1000 / 60;
     timeRun = timeToRun * 1000 * 60;
   }
-  
-  // console.log("Run again in " + minToRun + " minutes");
+
+  console.log("");
+  console.log("-------------------------------------------");
+  console.log("Run again in " + timeToRun + " minutes");
+  console.log("");
   Meteor.setTimeout(function() {
     checkURLsRepeat();
   }, timeRun);
@@ -293,15 +311,15 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
     // console.log("----------------------------------------------");
     // console.log("URL ID = " + urlId);
     // console.log("!!!!!!!!  --------------------------  !!!!!!!!");
-    
+
     let status = "";
     let color = "";
 
     //
     // if you feel like this is familiar, it is, we did this all up above
     // but in this case I also check to see if there is an existing hostStatus
-    // that needs to be set to active = false, then add the new one and set it 
-    // to active = true. 
+    // that needs to be set to active = false, then add the new one and set it
+    // to active = true.
     //
 
     HTTP.get(myURL, {mode: 'no-cors'}, function(err, result){
@@ -394,7 +412,7 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
             console.log("");
             console.log("Found Host Count Active to NOT be zero!");
             console.log("");
-            
+
             Meteor.call('hostStatus.updateActive', urlId, function(err, result){
               if (err) {
                 console.log("Error updating host status: " + err);
@@ -419,7 +437,7 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
                       console.log("!!!!!! -------------- !!!!!! ------------- !!!!!! ---------------");
                       console.log("--- After 3rd try - Finally Adding new Active Info for " + myURL);
                       console.log("");
-                      
+
                       Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck, function(err, result) {
                         if (err) {
                           console.log("Error adding host status: " + err);
@@ -444,7 +462,7 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
                     }
                   });
                 }
-                
+
               }
             });
           } else {
@@ -474,11 +492,11 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
 pingURL = function(now, nowFormatted, timeToRun, url, urlId) {
 
   //
-  // I have to do some fun stuff here.  We get the full URL then split off the 
+  // I have to do some fun stuff here.  We get the full URL then split off the
   // part before the fqdn, so https://google.com becomes google.com
   //
   let splitUrl = url.split('//');
-  
+
   // console.log("splitURl is: " + splitUrl[1]);
 
   //
@@ -534,9 +552,9 @@ pingURL = function(now, nowFormatted, timeToRun, url, urlId) {
         //
         Meteor.call('pingCheck.add', urlId, url, pingTime);
       }
-      
+
     }
-    
+
   })
 );
 }

@@ -16,7 +16,7 @@
             <tbody>
                 {{#each hostURL}}
                 <tr>
-                    <td class="getPingInfo">{{url}}</td>
+			<td class="getPingInfo"><a href="{{url}}">{{url}}</a></td>
                     <td class="getPingInfo"  style="background: {{getStatus.statusColor}}">{{getStatus.status}}</td>
                     <td class="getPingInfo">{{getStatus.lastRunOn}}</td>
                     <td class="getPingInfo">{{getStatus.nextRunOn}}</td>
