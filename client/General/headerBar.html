@@ -3,7 +3,11 @@
         <div class="nav-wrapper blue darken-4">
           <a href="#" class="brand-logo center">Host Up</a>
           <ul id="nav-mobile" class="left">
+            {{#if currentUser}}
             <li>{{> menuBtn}}</li>
+            {{else}}
+            <li id="signIn" class="padMe myPointer">Sign In</li>
+            {{/if}}
           </ul>
         </div>
       </nav>

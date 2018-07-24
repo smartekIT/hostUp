@@ -7,7 +7,7 @@ Template.hostInput.onCreated(function() {
 });
 
 Template.hostInput.onRendered(function() {
-    
+
 });
 
 Template.hostInput.helpers({
@@ -32,15 +32,8 @@ Template.hostInput.helpers({
     canAddSite: function() {
         let config = ConfigColl.findOne({});
         let maxSitesUnPaid = config.maxNoOfSitesFree;
-        // console.log("---------------------------");
-        // console.log("Config is:");
-        // console.dir(config);
-        // console.log("---------------------------");
-        
+
         let myNoSites = URLToCheck.find().count();
-        // console.log("My No of Sites is: " + myNoSites);
-        // console.log("Max No of Sites is: " + maxSitesUnPaid);
-        
 
         if (myNoSites >= maxSitesUnPaid) {
             return false;
@@ -59,8 +52,6 @@ Template.hostInput.events({
         let emailAddress = $("#emailAddress").val();
         let often = 20;
 
-        // console.log(("Email If down if: " + emailIfDown));
-        
         if (url == "" || url == null) {
             showSnackbar("URL is Required!", "red");
             return;
@@ -70,7 +61,7 @@ Template.hostInput.events({
                 return;
             }
         }
-        
+
 
         Meteor.call("host.add", url, often, emailIsDown, emailAddress, function(err, result) {
             if (err) {
@@ -96,7 +87,7 @@ Template.hostInput.events({
         // console.log(("Email If down if: " + emailIfDown));
 
         // check that they've entered the minimum required info.
-        
+
         if (url == "" || url == null) {
             showSnackbar("URL is Required!", "red");
             return;
@@ -108,7 +99,7 @@ Template.hostInput.events({
         }
 
         // set a default timeframe to check (default time = 20 minutes)
-        
+
         if (often == "" || often == null) {
             often = 20;
         } else {
