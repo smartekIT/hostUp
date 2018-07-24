@@ -9,6 +9,11 @@
             <li id="signIn" class="padMe myPointer">Sign In</li>
             {{/if}}
           </ul>
+          {{#if currentUser}}
+            <ul class="right">
+              <li><i class="material-icons">notifications</i></li>
+            </ul>
+          {{/if}}
         </div>
       </nav>
       {{> navMain}}

@@ -298,7 +298,9 @@ checkURLsRepeat = function() {
             pingURL(now, nowFormatted, freq, myURL, urlId);
 
             // **** now set a timer to recheck things.
-            repeatChecks(freq);
+            if (i == numUrlsToCheck) {
+              repeatChecks(freq);
+            }
 
           } else {
             //
@@ -335,7 +337,9 @@ checkURLsRepeat = function() {
           pingURL(now, nowFormatted, freq, myURL, urlId);
 
           // **** now set a timer to recheck things.
-          repeatChecks(freq);
+          if (i == numUrlsToCheck) {
+            repeatChecks(freq);
+          }
         }
       }
     } else {
