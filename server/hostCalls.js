@@ -8,22 +8,31 @@ import { ConfigColl } from '../imports/api/configColl.js';
 
 Meteor.methods({
   'hosts.call' (urlId, myURL, freq) {
+
+    // ****     first let's get the current date and time
     let now = new Date();
+
+    // ****     next let's get the date time formatted so we can do some comparisons
     let nowFormatted = moment(now).format('YYYY-MM-DD HH:mm:ss');
 
+    // ****     let's grab our configurations for the site from the mongo db.
     let config = ConfigColl.findOne({});
 
+    // ****     check to see if the config collection exists and is defined
     if (typeof config == 'undefined' || config == null || config == "") {
+      // ****     if it doesn't exist set the site default check time to every  30 minutes
       var timeToRun = 30;
     } else {
+
+      // ****     if it does exist, get the time from the configuration collection
       var timeToRun = config.defaultFreq;
     }
 
     // ****    set the next time for a check of the URL
     let nextCheck = moment(now).add(timeToRun, 'minutes').format('YYYY-MM-DD HH:mm:ss');
 
+    // ****    Now call the function to check our URLs status
     callHostURL(myURL, urlId, nextCheck, timeToRun)
-
   },
 });
 
@@ -36,9 +45,9 @@ Meteor.methods({
 
 callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
 
-  console.log("");
-  console.log(" ----    Inside the functon to check the URLs    ----");
-  console.log("");
+  // console.log("");
+  // console.log(" ----    Inside the functon to check the URLs    ----");
+  // console.log("");
 
   HTTP.get(myURL, { mode: 'no-cors' }, function(err, result) {
     if (err) {
@@ -230,17 +239,16 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
 
 // *******************************************************************************************
 //
-// Now we'll check the URLs to see if their next check time is here, and if so, check their
-// status.
+// Now we'll check the URLs based on a timer
 //
 // *******************************************************************************************
 
-checkURLsRepeat = function() {
+checkURLsRepeat = function(serverStarted) {
   //
   // ****    this is code we run when the server starts. We have to do this so that the timer
   // ****    based checks start even if no one views the website for a while.
   //
-  try {
+  if (serverStarted == true) {
 
     let status = "";
 
@@ -249,22 +257,11 @@ checkURLsRepeat = function() {
     //
     let checkURLs = URLToCheck.find({}).fetch();
 
-    //
-    // ****    Now we'll make sure the collection we get back isn't empty, undefined, or null.
-    // ****    As long as it's not, we'll start runnign through our array of info and assigning
-    // ****    variables and setting up for our timer calls.
-    //
-    // ****    The section below looks complicated, but really I'm just setting up to compare
-    // ****    the last checked time for a URL to the current date and time.  If the URL doesn't
-    // ****    have a previous check, then we setup some defaults.
-    //
-
-    //
-    // ****    get a count of how many URLs there are to check
-    //
-    let numUrlsToCheck = checkURLs.length;
-
     if (typeof checkURLs != 'undefined' && checkURLs != "" && checkURLs != null) {
+      // loop through what we find and run checks.
+      let numUrlsToCheck = checkURLs.length;
+      console.log("URL count: " + numUrlsToCheck);
+
       for (i = 0; i < numUrlsToCheck; i++) {
         let urlId = checkURLs[i]._id;
         let myURL = checkURLs[i].url;
@@ -275,59 +272,60 @@ checkURLsRepeat = function() {
 
         let currStatus = HostStatus.findOne({ urlId: urlId }, { sort: { runOn: -1 } });
 
-        if (typeof currStatus != 'undefined') {
-          // **** we are checking to see if the current status isn't set (thus a new url
-          // **** hasn't been checked yet). If not, then we get the next date / time a
-          // **** a check should be run.
+        // **** check the URL and see if it's up.
+        performURLCheck(now, nowFormatted, freq, myURL, urlId);
+
+        // **** check the ping of the URL
+        pingURL(now, nowFormatted, freq, myURL, urlId);
+
+        // **** now set a timer to recheck things.
+        if (i == (numUrlsToCheck-1)) {
+          repeatChecks(freq);
+        }
+      }
+    } else {
+      // no urls to check right now.
+    }
+  } else {
+    try {
+
+      let status = "";
+
+      //
+      // ****    First let's pull back all of the URLs we need to check
+      //
+      let checkURLs = URLToCheck.find({}).fetch();
+
+      //
+      // ****    Now we'll make sure the collection we get back isn't empty, undefined, or null.
+      // ****    As long as it's not, we'll start runnign through our array of info and assigning
+      // ****    variables and setting up for our timer calls.
+      //
+      // ****    The section below looks complicated, but really I'm just setting up to compare
+      // ****    the last checked time for a URL to the current date and time.  If the URL doesn't
+      // ****    have a previous check, then we setup some defaults.
+      //
+
+      //
+      // ****    get a count of how many URLs there are to check
+      //
+      let numUrlsToCheck = checkURLs.length;
+
+      if (typeof checkURLs != 'undefined' && checkURLs != "" && checkURLs != null) {
+        for (i = 0; i < numUrlsToCheck; i++) {
+          let urlId = checkURLs[i]._id;
+          let myURL = checkURLs[i].url;
+          let freq = checkURLs[i].freqCheck; // this is the frequency to check in minutes.
+          let now = new Date();
+          let nowFormatted = moment(now).format('YYYY-MM-DD HH:mm:ss');
+          let nowCompare = moment(nowFormatted).toISOString();
+
+          let currStatus = HostStatus.findOne({ urlId: urlId }, { sort: { runOn: -1 } });
+
           let nextRunISO = moment(currStatus.nextRun).toISOString();
 
-          if (nowCompare >= nextRunISO) {
-            //
-            // ****    basically if the current time is past when the next check should happen
-            // ****    we will run the next check by calling the appropriate functions below
-            //
-
-            console.log("");
-            console.log("Should run the check for " + myURL + " now.");
-            console.log("");
-
-            // **** check the URL and see if it's up.
-            performURLCheck(now, nowFormatted, freq, myURL, urlId);
-
-            // **** check the ping of the URL
-            pingURL(now, nowFormatted, freq, myURL, urlId);
-
-            // **** now set a timer to recheck things.
-            if (i == numUrlsToCheck) {
-              repeatChecks(freq);
-            }
-
-          } else {
-            //
-            // ****    if the next check isn't due yet, we just move on
-            //
-
-            // console.log("");
-            // console.log("Skipping run for " + myURL + " for now. It's not Time.");
-            // console.log("Next Run is after: " + currStatus.nextRun);
-            // console.log("");
-            let next = new Date(nextRunISO);
-            let compare = new Date(nowCompare);
-            let nextRunInMs = next - compare;
-            let nextRunIn = nextRunInMs / 1000 / 60;
-
-            console.log("**********************************************");
-            console.log("Next Run will be at: " + nextRunIn + " min");
-            console.log("**********************************************");
-          }
-        } else {
-          //
-          // ****    if the URL hasn't been run yet for some reason, we take this route.
-          // ****    really we should never hit this, but it could happen if you empty your
-          // ****    mongodb for some reason.
-          //
           console.log("");
-          console.log("Not run yet.");
+          console.log("Should run the check for " + myURL + " now.");
           console.log("");
 
           // **** check the URL and see if it's up.
@@ -337,24 +335,23 @@ checkURLsRepeat = function() {
           pingURL(now, nowFormatted, freq, myURL, urlId);
 
           // **** now set a timer to recheck things.
-          if (i == numUrlsToCheck) {
+          if (i == (numUrlsToCheck-1)) {
             repeatChecks(freq);
           }
         }
+      } else {
+        //
+        // **** you can uncomment this comment (or any for that matter) to get some logging
+        // ****if you aren't getting what you expect.
+        //
+
+        // console.log("Didn't find any URLs to Check at this time.");
       }
-    } else {
-      //
-      // **** you can uncomment this comment (or any for that matter) to get some logging
-      // ****if you aren't getting what you expect.
-      //
 
-      // console.log("Didn't find any URLs to Check at this time.");
+    } catch (error) {
+      console.log("Error Occurred server/hostCalls.js line 129: " + error);
     }
-
-  } catch (error) {
-    console.log("Error Occurred server/hostCalls.js line 129: " + error);
   }
-
 }
 
 // *******************************************************************************************
@@ -368,10 +365,17 @@ checkURLsRepeat = function() {
 // *******************************************************************************************
 
 repeatChecks = function(timeToRun) {
+  console.log("");
+  console.log("*** Inside the Timer function.");
+  console.log("Setting Repeat Timer for: " + timeToRun);
   if (timeToRun == "" || timeToRun == null || typeof timeToRun == 'undefined') {
+    console.log("");
+    console.log("*** using defaul time of 20 minutes.");
     let defaultTime = 20;
     timeRun = defaultTime * 1000 * 60;
   } else {
+    console.log("");
+    console.log("*** Was passed a time to use:" + timeToRun + " min");
     timeRun = timeToRun * 1000 * 60;
   }
 
@@ -380,15 +384,23 @@ repeatChecks = function(timeToRun) {
   console.log("Setting Timer to re-run in " + (timeRun / 1000 / 60) + " minutes.");
   console.log("");
   Meteor.setTimeout(function() {
-    checkURLsRepeat();
+    console.log("================================================");
+    console.log("");
+    console.log("Calling Check URLs Now based on Timer");
+    console.log("");
+    console.log("================================================");
+    checkURLsRepeat(false);
   }, timeRun);
 }
 
+// *******************************************************************************************
 //
-// **** This is hour function to check the URL Host Status (but this one runs when the server starts
+// **** This is our function to check the URL Host Status (but this one runs when the server starts
 // **** vs. when we enter a new URL).  Again this could be broken out into more than one function, but
 // **** I'll tackle that later.
 //
+// *******************************************************************************************
+
 performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
 
   let config = ConfigColl.findOne({});
@@ -420,8 +432,6 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
   console.log("");
   console.log(" ----     calling the function to check the URL    ----");
   callHostURL(myURL, urlId, nextCheck, timeToRun)
-
-
 }
 
 // **************************************************************************************************
@@ -444,9 +454,7 @@ pingURL = function(now, nowFormatted, timeToRun, url, urlId) {
   // **** command to ping the site 2 times.  You can increase this by changing the
   // **** number in the line below after the '-c'.
   //
-  let pingExec = shelljs.exec("ping -c 2 " + splitUrl[1], {
-    async: true
-  }, function(stdout, code, err) {
+  let pingExec = shelljs.exec("ping -c 2 " + splitUrl[1], { async: true }, function(stdout, code, err) {
     if (err) {
       console.log("Error on ShellJS call: " + err);
     } else {
@@ -492,7 +500,13 @@ pingURL = function(now, nowFormatted, timeToRun, url, urlId) {
         //
         // **** Finaly, we can now write this info to the database for ping data
         //
-        Meteor.call('pingCheck.add', urlId, url, pingTime);
+        Meteor.call('pingCheck.add', urlId, url, pingTime, function(err, result) {
+          if (err) {
+            console.log("Error adding ping check: " + err);
+          } else {
+            console.log("Ping Check added to db.");
+          }
+        });
       }
     }
   }));

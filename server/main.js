@@ -22,8 +22,8 @@ Meteor.startup(() => {
   }
 
   // console.log("Server starting - should be headed to checkURLsRepeat() function.");
-  
-  checkURLsRepeat();
+
+  checkURLsRepeat(true);
 });
 
 Meteor.methods({
