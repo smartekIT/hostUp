@@ -68,6 +68,10 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
           //
           // ****    if it's successfully written - call our timer function to start the timer
           //
+          status = "Internal Server Error";
+          color = "#FF0000";
+          email = "Yes";
+          emailResults(status, color, myURL, urlId);
           repeatChecks(timeToRun);
         }
       });
@@ -87,62 +91,77 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
         case 200:
           status = "Up";
           color = "#32CD32";
+          email = "No";
           break;
         case 400:
           status = "Bad Request: 400";
           color = "#32CD32";
+          email = "No";
           break;
         case 401:
           status = "Authorization Required";
           color = "#32CD32";
+          email = "No";
           break;
         case 402:
           status = "Payment Required";
           color = "#32CD32";
+          email = "No";
           break;
         case 403:
           status = "Access Forbidden";
           color = "#32CD32";
+          email = "No";
           break;
         case 404:
           status = "Not Found";
           color = "#ff0000";
+          email = "Yes";
           break;
         case 405:
           status = "Method Not Allowed";
           color = "#32CD32";
+          email = "No";
           break;
         case 406:
           status = "Not Acceptable";
           color = "#FFA500";
+          email = "Yes";
           break;
         case 407:
           status = "Proxy Authentication Required";
           color = "#FFA500";
+          email = "Yes";
           break;
         case 408:
           status = "Request Timeout";
           color = "#FFA500";
+          email = "Yes";
           break;
         case 409:
           status = "Conflict";
           color = "#FFA500";
+          email = "Yes";
           break;
         case 410:
           status = "Gone";
           color = "#FFA500";
+          email = "Yes";
           break;
         case 414:
           status = "Request URL Too Large";
           color = "#FFA500";
+          email = "Yes";
           break;
         case 500:
           status = "Internal Server Error";
           color = "#FF0000";
+          email = "Yes";
           break;
         default:
           status = "Undefined Response";
           color = "#FF0000";
+          email = "Yes";
       }
 
 
@@ -218,6 +237,10 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
 
           }
         });
+
+        if (email == "Yes") {
+            emailResults(status, color, myURL, urlId);
+        }
       } else {
 
         // console.log("!!!!!! -------------- !!!!!! ------------- !!!!!! ---------------");
@@ -232,6 +255,10 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
             console.log("");
           }
         });
+
+        if (email == "Yes") {
+            emailResults(status, color, myURL, urlId);
+        }
       }
     }
   });
@@ -510,4 +537,24 @@ pingURL = function(now, nowFormatted, timeToRun, url, urlId) {
       }
     }
   }));
+}
+
+emailResults = function(status, color, myURL, urlId) {
+    let configCheck = ConfigColl.findOne({});
+
+    if (configCheck.emailUser == "" || emailUser == null || emailPassword == "" || emailPassword == null || emailSmtpServer == "" || emailSever == null || emailSmtpPort == "" || emailSmtpPort == null) {
+        console.log("Email Info is not setup - not sending email.");
+    } else {
+        let toUser = Meteor.user().emails[0].address;
+        let fromUser = configCheck.emailUser;
+        let emailSubject = "Possible Site Down!";
+        let emailBody = "Your Site, " + myURL + " returned with a status of " + status + " during a recent check.  Please check your sites status to ensure it is up and running.";
+
+        Email.send({
+            to: toUser,
+            from: fromUser,
+            subject: emailSubject,
+            html: emailBody
+        });
+    }
 }

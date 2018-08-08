@@ -16,5 +16,10 @@
           {{/if}}
         </div>
       </nav>
+      {{#if isInRole 'Admin'}}
+          {{#if $eq needsConfig false}}
+            {{> needConfig}}
+          {{/if}}
+      {{/if}}
       {{> navMain}}
 </template>
