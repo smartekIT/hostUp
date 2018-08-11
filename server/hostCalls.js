@@ -21,8 +21,8 @@ Meteor.methods({
 
     // ****     check to see if the config collection exists and is defined
     if (typeof config == 'undefined' || config == null || config == "") {
-      // ****     if it doesn't exist set the site default check time to every  30 minutes
-      var timeToRun = 30;
+      // ****     if it doesn't exist set the site default check time to every  20 minutes
+      var timeToRun = 20;
     } else {
 
       // ****     if it does exist, get the time from the configuration collection
@@ -195,8 +195,8 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
       let currHostStatus = HostStatus.find({ urlId: urlId, active: true }).count();
 
       // console.log("------------- !!!!!!!!!!!!!!!! ----------------- !!!!!!!!!!!!!!! ----------------");
-      console.log("Current Host Active Status Count for " + myURL + " is: " + currHostStatus);
-      console.log("");
+      // console.log("Current Host Active Status Count for " + myURL + " is: " + currHostStatus);
+      // console.log("");
 
       // *******************************************************************************
       // if there is one, we set it to active = false, if not, wwe just add this
@@ -204,17 +204,14 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
       // *******************************************************************************
       if (currHostStatus != 0) {
         // console.log("");
-        console.log("Found Host Count Active to NOT be zero!");
-        console.log("");
+        // console.log("Found Host Count Active to NOT be zero!");
+        // console.log("");
 
         Meteor.call('hostStatus.updateActive', urlId, function(err, result) {
           if (err) {
             console.log("Error updating host status: " + err);
           } else {
-            let reCheck = HostStatus.find({
-              urlId: urlId,
-              active: true
-            }).count();
+            let reCheck = HostStatus.find({ urlId: urlId, active: true }).count();
 
             // console.log("!!!!!! -------------- !!!!!! ------------- !!!!!! ---------------");
             // console.log("Re-count found Active hosts for url " + myURL + " are: " + reCheck);
@@ -239,8 +236,8 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
                     if (err) {
                       console.log("Error adding host status: " + err);
                     } else {
-                      console.log("--- *** --- Active Entry should have been made for " + myURL);
-                      console.log(" ");
+                      // console.log("--- *** --- Active Entry should have been made for " + myURL);
+                      // console.log(" ");
                     }
                   });
                 }
@@ -254,8 +251,8 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
                 if (err) {
                   console.log("Error adding host status: " + err);
                 } else {
-                  console.log("--- *** --- Active Entry should have been made for " + myURL);
-                  console.log("");
+                  // console.log("--- *** --- Active Entry should have been made for " + myURL);
+                  // console.log("");
                 }
               });
             }
@@ -264,25 +261,33 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
         });
 
         if (email == "Yes") {
-            Meteor.call('emailResults', status, color, myURL, urlId);
+            Meteor.call('emailResults', status, color, myURL, urlId, function (err, result) {
+                if (err) {
+                    console.log("Error sending email: " + err);
+                }
+            });
         }
       } else {
 
         // console.log("!!!!!! -------------- !!!!!! ------------- !!!!!! ---------------");
-        console.log("All Host Entries were Non-Active Already! Adding new site info.");
-        console.log("");
+        // console.log("All Host Entries were Non-Active Already! Adding new site info.");
+        // console.log("");
 
         Meteor.call('hostStatus.add', urlId, myURL, status, color, nextCheck, function(err, result) {
           if (err) {
             console.log("Error adding Status Check for Host: " + err);
           } else {
-            console.log("--- *** --- Active Entry should have been made for " + myURL);
-            console.log("");
+            // console.log("--- *** --- Active Entry should have been made for " + myURL);
+            // console.log("");
           }
         });
 
         if (email == "Yes") {
-            Meteor.call('emailResults', status, color, myURL, urlId);
+            Meteor.call('emailResults', status, color, myURL, urlId, function(err, result) {
+                if (err) {
+                    console.log("Error sending email: " + err);
+                }
+            });
         }
       }
     }
@@ -312,7 +317,7 @@ checkURLsRepeat = function(serverStarted) {
     if (typeof checkURLs != 'undefined' && checkURLs != "" && checkURLs != null) {
       // loop through what we find and run checks.
       let numUrlsToCheck = checkURLs.length;
-      console.log("URL count: " + numUrlsToCheck);
+      // console.log("URL count: " + numUrlsToCheck);
 
       for (i = 0; i < numUrlsToCheck; i++) {
         let urlId = checkURLs[i]._id;
@@ -376,9 +381,9 @@ checkURLsRepeat = function(serverStarted) {
 
           let nextRunISO = moment(currStatus.nextRun).toISOString();
 
-          console.log("");
-          console.log("Should run the check for " + myURL + " now.");
-          console.log("");
+          // console.log("");
+          // console.log("Should run the check for " + myURL + " now.");
+          // console.log("");
 
           // **** check the URL and see if it's up.
           performURLCheck(now, nowFormatted, freq, myURL, urlId);
@@ -417,30 +422,30 @@ checkURLsRepeat = function(serverStarted) {
 // *******************************************************************************************
 
 repeatChecks = function(timeToRun) {
-  console.log("");
-  console.log("*** Inside the Timer function.");
-  console.log("Setting Repeat Timer for: " + timeToRun);
+  // console.log("");
+  // console.log("*** Inside the Timer function.");
+  // console.log("Setting Repeat Timer for: " + timeToRun);
   if (timeToRun == "" || timeToRun == null || typeof timeToRun == 'undefined') {
-    console.log("");
-    console.log("*** using defaul time of 20 minutes.");
+    // console.log("");
+    // console.log("*** using defaul time of 20 minutes.");
     let defaultTime = 20;
     timeRun = defaultTime * 1000 * 60;
   } else {
-    console.log("");
-    console.log("*** Was passed a time to use:" + timeToRun + " min");
+    // console.log("");
+    // console.log("*** Was passed a time to use:" + timeToRun + " min");
     timeRun = timeToRun * 1000 * 60;
   }
 
-  console.log("");
-  console.log("-------------------------------------------");
-  console.log("Setting Timer to re-run in " + (timeRun / 1000 / 60) + " minutes.");
-  console.log("");
+  // console.log("");
+  // console.log("-------------------------------------------");
+  // console.log("Setting Timer to re-run in " + (timeRun / 1000 / 60) + " minutes.");
+  // console.log("");
   Meteor.setTimeout(function() {
-    console.log("================================================");
-    console.log("");
-    console.log("Calling Check URLs Now based on Timer");
-    console.log("");
-    console.log("================================================");
+    // console.log("================================================");
+    // console.log("");
+    // console.log("Calling Check URLs Now based on Timer");
+    // console.log("");
+    // console.log("================================================");
     checkURLsRepeat(false);
   }, timeRun);
 }
@@ -481,8 +486,8 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
   // **** to active = true.
   //
 
-  console.log("");
-  console.log(" ----     calling the function to check the URL    ----");
+  // console.log("");
+  // console.log(" ----     calling the function to check the URL    ----");
   callHostURL(myURL, urlId, nextCheck, timeToRun)
 }
 
@@ -556,7 +561,7 @@ pingURL = function(now, nowFormatted, timeToRun, url, urlId) {
           if (err) {
             console.log("Error adding ping check: " + err);
           } else {
-            console.log("Ping Check added to db.");
+            // console.log("Ping Check added to db.");
           }
         });
       }

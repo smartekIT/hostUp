@@ -20,8 +20,8 @@ Meteor.methods({
         check(statusColor, String);
         check(nextRun, String);
 
-        let mine = URLToCheck.findOne({ _id: urlId });
-        let me = mine.addedBy;
+        let thisURL = URLToCheck.findOne({ _id: urlId });
+        let me = thisURL.addedBy;
 
         // add the new findings
         return HostStatus.insert({

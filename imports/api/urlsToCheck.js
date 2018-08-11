@@ -35,6 +35,11 @@ Meteor.methods({
             addedBy: Meteor.user().emails[0].address,
         });
     },
+    // ******************************************************************
+    //
+    //  Edit URLs to check
+    //
+    // ******************************************************************
     'host.edit' (urlId, url, timeBetweenChecks, emailIfDown, emailAddress, emailRepeat, emailRepeatHowOften) {
         check(urlId, String);
         check(url, String);

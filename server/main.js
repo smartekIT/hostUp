@@ -12,17 +12,17 @@ Meteor.startup(() => {
     let msgSettings = ConfigColl.findOne({});
     if (typeof msgSettings.emailUser == 'undefined' || msgSettings.emailUser == null || msgSettings.emailUser == "") {
       // msg settings not set, route user to setup for message settings.
-      console.log("Didn't find email settings.");
+      // console.log("Didn't find email settings.");
     } else {
         let user = msgSettings.emailUser;
-        console.log("Found User: " + user);
+        // console.log("Found User: " + user);
         Meteor.call('setEmailFromServer', msgSettings);
     }
   } catch (error) {
       console.log("Error caught in server/main.js: " + error);
   }
 
-  console.log("Server starting - should be headed to checkURLsRepeat() function.");
+  // console.log("Server starting - should be headed to checkURLsRepeat() function.");
   checkURLsRepeat(true);
 });
 
@@ -30,7 +30,7 @@ Meteor.methods({
   'setEmailFromServer' (msgSettings) {
       console.log("Getting message setting setup.");
       if (typeof msgSettings != 'undefined') {
-          console.log(msgSettings.emailUser);
+          // console.log(msgSettings.emailUser);
           smtp = {
               username: msgSettings.emailUser,
               password: msgSettings.emailPassword,
@@ -38,7 +38,7 @@ Meteor.methods({
               port: msgSettings.emailSmtpPort
           }
           process.env.MAIL_URL = 'smtp://' + encodeURIComponent(smtp.username) + ':' + encodeURIComponent(smtp.password) + '@' + encodeURIComponent(smtp.server) + ':' + smtp.port;
-          console.log(process.env.MAIL_URL);
+          // console.log(process.env.MAIL_URL);
       }
   },
 });
