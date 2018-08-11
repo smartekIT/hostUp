@@ -20,7 +20,7 @@ Template.hostList.helpers({
         return URLToCheck.find({});
     },
     getStatus: function() {
-        // try {
+        try {
             let url = this.url;
             let urlId = this._id;
 
@@ -50,9 +50,9 @@ Template.hostList.helpers({
             thisHostStatus.statusColor = myHostStatus.statusColor;
 
             return thisHostStatus;
-        // } catch (error) {
-        //     console.log("Error in getStatus call: " + error);
-        // }
+        } catch (error) {
+            console.log("Error in getStatus call: " + error);
+        }
     },
     runOnDate: function() {
         return Session.get("lastRunOn");
@@ -83,7 +83,7 @@ Template.hostList.events({
 
         let hostId = this._id;
         // console.log("Host id: " + hostId);
-        
+
         Meteor.call('host.delete', hostId, function(err, result){
             if (err) {
                 console.log("Error deleting host: " + err);
@@ -104,7 +104,7 @@ Template.hostList.events({
         let pingObj = [];
 
         pullPings(pingObj);
- 
+
     },
 });
 

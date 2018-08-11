@@ -18,17 +18,10 @@ Template.myModal.helpers({
 Template.myModal.events({
     'click #continue' (event) {
         // event.preventDefault();
-        console.log("Clicked Continue.");
-        
+        // console.log("Clicked Continue.");
 
         let source = Session.get("modalFrom");
 
         $("#genModal").modal('close');
-
-        if (source == "resetMenu") {
-            randomizeMenu();
-        } else if (source == "deleteMealItem") {
-            deleteMealItem();
-        }
     }
 });
