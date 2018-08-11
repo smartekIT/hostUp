@@ -57,8 +57,11 @@ I have tested this and it does work.
 
 ##### Example
 Email Username: greg
+
 Email Password: f93kfjaldj4 59%4k3l # 4JJ
+
 SMTP Server URL: smtp.gmail.com
+
 SMTP Port: 587
 
 *Note*: Gmail is a tricky little beast. If you setup Gmail on a remote server such as with Digital Ocean or some other VPS provider you'll need to set up your security in Gmail to allow it to send.
