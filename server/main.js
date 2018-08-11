@@ -29,16 +29,16 @@ Meteor.startup(() => {
 Meteor.methods({
   'setEmailFromServer' (msgSettings) {
       console.log("Getting message setting setup.");
-      if (msgSettings) {
+      if (typeof msgSettings != 'undefined') {
+          console.log(msgSettings.emailUser);
           smtp = {
               username: msgSettings.emailUser,
-              password: msgSettings.emailPasswd,
-              server: msgSettings.smtpSrvUrl,
-              port: msgSettings.smtpPort
+              password: msgSettings.emailPassword,
+              server: msgSettings.emailSmtpServer,
+              port: msgSettings.emailSmtpPort
           }
-
           process.env.MAIL_URL = 'smtp://' + encodeURIComponent(smtp.username) + ':' + encodeURIComponent(smtp.password) + '@' + encodeURIComponent(smtp.server) + ':' + smtp.port;
-
+          console.log(process.env.MAIL_URL);
       }
   },
 });

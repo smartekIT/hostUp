@@ -5,6 +5,7 @@ import { PingStatus } from '../imports/api/pingStatus.js';
 import shelljs from 'shelljs';
 import { log } from 'shelljs/src/common';
 import { ConfigColl } from '../imports/api/configColl.js';
+import { Email } from 'meteor/email';
 
 Meteor.methods({
   'hosts.call' (urlId, myURL, freq) {
@@ -33,6 +34,30 @@ Meteor.methods({
 
     // ****    Now call the function to check our URLs status
     callHostURL(myURL, urlId, nextCheck, timeToRun)
+  },
+  'emailResults' (status, color, myURL, urlId) {
+      let configCheck = ConfigColl.findOne({});
+      let urlInfo = URLToCheck.findOne({ _id: urlId });
+
+      if (typeof configCheck == 'undefined') {
+          console.log("Configuration was undefined.");
+      } else {
+          if (configCheck.emailUser == "" || configCheck.emailUser == null || configCheck.emailPassword == "" || configCheck.emailPassword == null || configCheck.emailSmtpServer == "" || configCheck.emailSmtpServer == null || configCheck.emailSmtpPort == "" || configCheck.emailSmtpPort == null) {
+              console.log("Email Info is not setup - not sending email.");
+          } else {
+              let toUser = urlInfo.emailAddress;
+              let fromUser = configCheck.emailUser;
+              let emailSubject = "Possible Site Down!";
+              let emailBody = "Your Site, " + myURL + " returned with a status of " + status + " during a recent check.  Please check your sites status to ensure it is up and running.";
+
+              Email.send({
+                  to: toUser,
+                  from: fromUser,
+                  subject: emailSubject,
+                  html: emailBody
+              });
+          }
+      }
   },
 });
 
@@ -71,7 +96,7 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
           status = "Internal Server Error";
           color = "#FF0000";
           email = "Yes";
-          emailResults(status, color, myURL, urlId);
+          Meteor.call('emailResults', status, color, myURL, urlId);
           repeatChecks(timeToRun);
         }
       });
@@ -239,7 +264,7 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
         });
 
         if (email == "Yes") {
-            emailResults(status, color, myURL, urlId);
+            Meteor.call('emailResults', status, color, myURL, urlId);
         }
       } else {
 
@@ -257,7 +282,7 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
         });
 
         if (email == "Yes") {
-            emailResults(status, color, myURL, urlId);
+            Meteor.call('emailResults', status, color, myURL, urlId);
         }
       }
     }
@@ -537,24 +562,4 @@ pingURL = function(now, nowFormatted, timeToRun, url, urlId) {
       }
     }
   }));
-}
-
-emailResults = function(status, color, myURL, urlId) {
-    let configCheck = ConfigColl.findOne({});
-
-    if (configCheck.emailUser == "" || emailUser == null || emailPassword == "" || emailPassword == null || emailSmtpServer == "" || emailSever == null || emailSmtpPort == "" || emailSmtpPort == null) {
-        console.log("Email Info is not setup - not sending email.");
-    } else {
-        let toUser = Meteor.user().emails[0].address;
-        let fromUser = configCheck.emailUser;
-        let emailSubject = "Possible Site Down!";
-        let emailBody = "Your Site, " + myURL + " returned with a status of " + status + " during a recent check.  Please check your sites status to ensure it is up and running.";
-
-        Email.send({
-            to: toUser,
-            from: fromUser,
-            subject: emailSubject,
-            html: emailBody
-        });
-    }
 }
