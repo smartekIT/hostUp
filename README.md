@@ -142,7 +142,7 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
     => App running at: http://localhost:3000/
 
-   11. Test out the basec page loading and functions by going to your server ip or URL at port 3000, for exampl `10.21.3.41:3000` or `http://mysuperawesomeurl.com:3000`
+   11. Test out the basec page loading and functions by going to your server ip or URL at port 3000, for example `10.21.3.41:3000` or `http://mysuperawesomeurl.com:3000`
 
    12. If everything is working, then use `CTRL+C` to stop the meteor app from running, and let's build.
 
@@ -156,7 +156,7 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
     Forever is an application that will watch your app and make sure it comes back up should it crash for some reason.
 
-    2. We need to build the meteor app to run for production.  It's not hard, just takes some time.
+    14. We need to build the meteor app to run for production.  It's not hard, just takes some time.
 
     From the app directory created when you cloned the git repo, run the following command.  Notice that I'm telling the app to build in a different directory than the one I'm in.
 
@@ -164,15 +164,15 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
     This 'compiles' the app and minifies all the css and js as well as makes the actual nodejs capable version.
 
-    3. When it's done, move back one directory, and into the newly created build directory.
+    15. When it's done, move back one directory, and into the newly created build directory.
 
     `cd ../hostUp-node`
 
-    4. Now, do an `ls` and notice the `bundle` directory.
+    16. Now, do an `ls` and notice the `bundle` directory.
 
     `cd bundle`
 
-    5. Now we need to install dependencies.
+    17. Now we need to install dependencies.
 
     `cd programs/server`  --> so the full path we are in is `~/hostUp-node/bundle/programs/server`
 
@@ -180,7 +180,7 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
     This will install all npm dependencies for the production system.
 
-    6. Now we need to set some environmental variables for our app to use when running.
+    18. Now we need to set some environmental variables for our app to use when running.
 
     First let's set the MONGO_URL (tell the app where to connect to our Mongo DB).  Remember this can be run locally, but certainly doesn't have to be, so yoru MONBO_URL may refer to a different server URL or IP.
 
@@ -188,11 +188,11 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
     This command tells the system to find mongodb on our local server, and to use port 27017 (however, if you told mongo to run on a different port, then please change that number to match the port number you selected), and to use a database called "hostUp".
 
-    7. Now we'll tell our app what it's main URL is (basically what a user will type into their browser to get to our web based application).
+    19. Now we'll tell our app what it's main URL is (basically what a user will type into their browser to get to our web based application).
 
     `export ROOT_URL="http://<your web site name or IP>"`
 
-    8. Now, we tell our app that it should run on a port.  If you want someone one to just type the name of your site and get straight to your app, then use port 80.  Any other port (besides 443) will need the user to enter the port after your web site name like this `http://<my-site-name>:port`
+    20. Now, we tell our app that it should run on a port.  If you want someone one to just type the name of your site and get straight to your app, then use port 80.  Any other port (besides 443) will need the user to enter the port after your web site name like this `http://<my-site-name>:port`
 
     >
     > NOTE: you can also setup NGinX web server to act as a reverse proxy to your site.  There are several tutorials on this, as well as tutorials on using LetsEncrypt to get a free SSL Certificate.   I highly recommend doing this if you intend to have a production site.
