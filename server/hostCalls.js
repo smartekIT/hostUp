@@ -96,6 +96,8 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
           status = "Internal Server Error";
           color = "#FF0000";
           email = "Yes";
+
+          // ****    now we'll call our email function to send the user an email
           Meteor.call('emailResults', status, color, myURL, urlId);
           repeatChecks(timeToRun);
         }
@@ -260,6 +262,8 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
           }
         });
 
+        // ****    if we found a down status or potentially down, we set 'email' as yes
+        // ****    and send the email to the user to notify them of the status.
         if (email == "Yes") {
             Meteor.call('emailResults', status, color, myURL, urlId, function (err, result) {
                 if (err) {
@@ -282,6 +286,8 @@ callHostURL = function(myURL, urlId, nextCheck, timeToRun) {
           }
         });
 
+        // ****    if we found a down status or potentially down, we set 'email' as yes
+        // ****    and send the email to the user to notify them of the status.
         if (email == "Yes") {
             Meteor.call('emailResults', status, color, myURL, urlId, function(err, result) {
                 if (err) {
