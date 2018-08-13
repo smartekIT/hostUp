@@ -12,7 +12,7 @@ Host Up
 * [User Basics](#user-basics)
 * [Configuration](#config)
 * [Production Mode](#prod-mode)
-** [Production Mode - Need to Install](#prod-mode-needs)
+  * [Production Mode - Need to Install](#prod-mode-needs)
 
 <a id="dev-mode" name="dev-mode"></a>
 ### Running in Dev Mode
