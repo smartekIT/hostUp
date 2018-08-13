@@ -1,5 +1,21 @@
+Host Up
+============
+
+<br />
+
 ## hostUp - A simple URL Status Checker for Uptime
 #### Written with MeteorJS using NodeJS, HTML5, Javascript
+
+<a id="hostUp-toc" name="hostUp-toc"></a>
+## Table of Contents
+* [Running in Dev Mode](#dev-mode)
+* [User Basics](#user-basics)
+* [Configuration](#config)
+* [Production Mode](#prod-mode)
+** [Production Mode - Need to Install](#prod-mode-needs)
+
+<a id="dev-mode" name="dev-mode"></a>
+### Running in Dev Mode
 
 To run it in Dev mode you'll need to do the following:
 
@@ -37,6 +53,8 @@ Once it's running you should see this in your terminal:
 
 Or something very similar.
 
+<a id="user-basics" name="user-basics"></a>
+### User Basics
 Now you can navigate to localhost:3000 as indicated to see the page.  Use the Menu icon in the upper left of the screen to get to the host input screen.  Input your first url to check.  Please use full URLs including http or https.
 
 Once you've added a URL or two to check, you can navigate back to the Host List view. The hosts you are monitoring should show in a grid, and you can see their status, the last time they were checked, and the next time they'll be checked in the view. You can edit or delete a host using the Action icons at the right of each column.
@@ -47,6 +65,7 @@ The menu icon in the upper left allows you to move to the input screen and back 
 
 *NOTE*: this application just checks to see if the site is up or not.  This is not a watcher for changes.
 
+<a id="config" name="config"></a>
 ### Configuration
 You can setup default time in minutes for each check to occur of the entered sites as well as the max number of sites a user can have.
 
@@ -68,11 +87,13 @@ SMTP Port: 587
 
 It's better to use a self-hosted email server, or something like MailGun or similar system intended for emailing out from an automated system.
 
-## Production Use
+<a id="prod-mode" name="prod-mode"></a>
+### Production Use
 To run this project in a production environment, you'll want to get a few things installed.  I'm going to use instructions for a Linux / Ubuntu 16.04 or 18.04 LTS server.
 
 I do run all of my public servers on Digital Ocean.  I love their ease of setup, and ease of use.  There's my plug.  I get nothing for it, so please sign up and enjoy.
 
+<a id="prod-mode-needs" name="prod-mode-needs"></a>
 ### What you need
   1. A server running some fairly recent form of linux. First, Update the server to the latest files.
 
