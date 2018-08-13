@@ -13,6 +13,13 @@ Host Up
 * [Configuration](#config)
 * [Production Mode](#prod-mode)
   * [Production Mode - Need to Install](#prod-mode-needs)
+  * [Production Mode - Run It Forever](#prod-mode-forever)
+  * [Production Mode - Build](#prod-mode-build)
+    * [Production Mode - Set Some Environmental Variables](#env-vars)
+* [To Do Still](#to-do-still)
+* [Contribute](#contribute)
+
+<br />
 
 <a id="dev-mode" name="dev-mode"></a>
 ### Running in Dev Mode
@@ -117,6 +124,8 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
   Again, I'm pointing to a Digital Ocean article, but it's the same for any Ubuntu install essentially.
 
+<a id="prod-mode-setup" name="prod-mode-setup"></a>
+### Setup and Install - Production Mode
   6. Clone the repository from github.  
 
     git clone https://github.com/bmcgonag/hostUp.git
@@ -167,13 +176,15 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
    12. If everything is working, then use `CTRL+C` to stop the meteor app from running, and let's build.
 
+<a id="prod-mode-forever" name="prod-mode-forever"></a>
+### Production Mode - Run It Forever
    13. Install "forever" from npm onto your production server.
 
     `npm i -g forever`
 
-    >
-    > NOTE: you need to run the -g option with root privileges. (this may require `sudo` or whatever varian of it for your chosen OS)
-    >
+>
+> NOTE: you need to run the -g option with root privileges. (this may require `sudo` or whatever varian of it for your chosen OS)
+>
 
     Forever is an application that will watch your app and make sure it comes back up should it crash for some reason.
 
@@ -181,6 +192,8 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
     From the app directory created when you cloned the git repo, run the following command.  Notice that I'm telling the app to build in a different directory than the one I'm in.
 
+<a id="prod-mode-build" name="prod-mode-build"></a>
+#### Production Mode - Build
     `meteor build --directory ../hostUp-node`
 
     This 'compiles' the app and minifies all the css and js as well as makes the actual nodejs capable version.
@@ -205,6 +218,8 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
     First let's set the MONGO_URL (tell the app where to connect to our Mongo DB).  Remember this can be run locally, but certainly doesn't have to be, so yoru MONBO_URL may refer to a different server URL or IP.
 
+<a id="env-vars" name="env-vars"></a>
+#### Set Some Environment Variables
     `export MONGO_URL="mongodb://127.0.0.1:27017/hostUp"`
 
     This command tells the system to find mongodb on our local server, and to use port 27017 (however, if you told mongo to run on a different port, then please change that number to match the port number you selected), and to use a database called "hostUp".
@@ -265,8 +280,10 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
     Enjoy!
 
+<a id="to-do-still" name="to-do-still"></a>
 ## To Do Still
 I would like to add a per URL timer setting.  I had this in originally, but found that the way I set it up it eventually created a cascading set of checks that became so frequent they could never finish before the next set was running.  
 
-## Contribue
+<a id="contribute" name="contribute"></a>
+## Contribute
 I'm always 100% open to contributions from anyone willing to help out, learn or otherwise.
