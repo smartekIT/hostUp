@@ -50,6 +50,12 @@ Meteor.methods({
               let emailSubject = "Possible Site Down!";
               let emailBody = "Your Site, " + myURL + " returned with a status of " + status + " during a recent check.  Please check your sites status to ensure it is up and running.";
 
+              Meteor.call("add.notification", urlId, toUser, status, function(err, result) {
+                if (err) {
+                  console.log("Error adding Notification: " + err);
+                }
+              });
+
               Email.send({
                   to: toUser,
                   from: fromUser,
@@ -498,10 +504,13 @@ performURLCheck = function(now, nowFormatted, freq, myURL, urlId) {
 }
 
 // **************************************************************************************************
+//
 // Now we want to run a ping check to give some stats on how our site's connection response is
 // over time.  In the UI right now I display the last 1000 pings to give a feel for how rimes are
 // over time
+//
 // **************************************************************************************************
+
 pingURL = function(now, nowFormatted, timeToRun, url, urlId) {
 
   //

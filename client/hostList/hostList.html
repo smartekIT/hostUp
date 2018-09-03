@@ -1,7 +1,14 @@
 <template name="hostList">
     <div class="container pushDown">
         <h4>Hosts Monitored</h4>
-        
+        <div class="row">
+            <div class="col s6 flow-text">
+                Max Number of Sites per User: {{defaultSiteInfo.maxNoOfSitesFree}}
+            </div>
+            <div class="col s6 flow-text">
+                Time Between Checks: {{defaultSiteInfo.defaultFreq}} minutes
+            </div>
+        </div>
         {{#if Template.subscriptionsReady}}
         <table class="highlight striped">
             <thead>

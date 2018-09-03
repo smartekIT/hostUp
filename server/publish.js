@@ -2,6 +2,7 @@ import { URLToCheck } from '../imports/api/urlsToCheck.js';
 import { ConfigColl } from '../imports/api/configColl.js';
 import { HostStatus } from '../imports/api/hostStatus.js';
 import { PingStatus } from '../imports/api/pingStatus.js';
+import { Notify } from '../imports/api/notify.js';
 
 Meteor.publish("urlChecks", function() {
     let me = Meteor.user().emails[0].address;
@@ -30,4 +31,10 @@ Meteor.publish("configSettings", function() {
         console.log("Is Not Admin!!!");
         return ConfigColl.find({}, { fields: { maxNoOfSitesFree: 1, defaultFreq: 1 }});
     }
+});
+
+Meteor.publish("myNotifications", function() {
+    let myUser = Meteor.user().emails[0].address;
+
+    return Notify.find({ ownerEmail: myUser, read: false });
 });

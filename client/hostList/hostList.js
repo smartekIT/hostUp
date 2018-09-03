@@ -1,10 +1,12 @@
 import { URLToCheck } from '../../imports/api/urlsToCheck.js';
 import { HostStatus } from '../../imports/api/hostStatus.js';
 import { PingStatus } from '../../imports/api/pingStatus.js';
-
+import { ConfigColl } from '../../imports/api/configColl.js';
+ 
 Template.hostList.onCreated(function() {
     this.subscribe("urlChecks");
     this.subscribe("hostStatuses");
+    this.subscribe("configSettings");
 
     this.autorun(() => {
         this.subscribe("pingStatuses", Session.get("myUrl"));
@@ -59,6 +61,22 @@ Template.hostList.helpers({
     },
     nextRunIs: function() {
         return Session.get("nextRunOn");
+    },
+    defaultSiteInfo: function() {
+        let myConfig = {};
+        let config = ConfigColl.findOne();
+        if (typeof config == 'undefined' || config.maxNoOfSitesFree == null || config.maxNoOfSitesFree == "" || typeof config.maxNoOfSitesFree == 'undefined') {
+            myConfig.maxNoOfSitesFree = "No Limit";
+        } else {
+            myConfig.maxNoOfSitesFree = config.maxNoOfSitesFree;
+        }
+
+        if (typeof config == 'undefined' || config.defaultFreq == null || config.defaultFreq == "" || typeof config.defaultFreq == 'undefined') {
+            myConfig.defaultFreq = 20;
+        } else {
+            myConfig.defaultFreq = config.defaultFreq;
+        }
+        return myConfig;
     },
 });
 

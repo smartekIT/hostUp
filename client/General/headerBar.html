@@ -11,7 +11,9 @@
           </ul>
           {{#if currentUser}}
             <ul class="right">
-              <li><i class="material-icons">notifications</i></li>
+              <li>{{emailAdd}}</li>
+              <li><i class="material-icons notify-list {{#if $eq hasNotifications true}}icon-red{{/if}}">notifications</i></li>
+              {{#if $eq hasNotifications true}}<li class="padMe"><span class="badge red darken-2"><strong>{{noOfUnreadNotifications}}</strong></span></li>{{/if}}
             </ul>
           {{/if}}
         </div>
