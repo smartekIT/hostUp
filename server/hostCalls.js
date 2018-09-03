@@ -43,14 +43,26 @@ Meteor.methods({
           console.log("Configuration was undefined.");
       } else {
           if (configCheck.emailUser == "" || configCheck.emailUser == null || configCheck.emailPassword == "" || configCheck.emailPassword == null || configCheck.emailSmtpServer == "" || configCheck.emailSmtpServer == null || configCheck.emailSmtpPort == "" || configCheck.emailSmtpPort == null) {
-              console.log("Email Info is not setup - not sending email.");
+            let toUser = urlInfo.emailAddress;  
+            
+            console.log("Email Info is not setup - not sending email.");
+            
+            // we first add an entry into our notify collection to provide visual feedback
+            // to the useer on the web-page.
+            Meteor.call("add.notification", myURL, toUser, status, function(err, result) {
+              if (err) {
+                console.log("Error adding Notification: " + err);
+              }
+            });
           } else {
               let toUser = urlInfo.emailAddress;
               let fromUser = configCheck.emailUser;
               let emailSubject = "Possible Site Down!";
               let emailBody = "Your Site, " + myURL + " returned with a status of " + status + " during a recent check.  Please check your sites status to ensure it is up and running.";
 
-              Meteor.call("add.notification", urlId, toUser, status, function(err, result) {
+              // we first add an entry into our notify collection to provide visual feedback
+              // to the useer on the web-page.
+              Meteor.call("add.notification", myURL, toUser, status, function(err, result) {
                 if (err) {
                   console.log("Error adding Notification: " + err);
                 }

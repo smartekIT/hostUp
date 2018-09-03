@@ -44,5 +44,13 @@ Template.headerBar.events({
 	"click #signIn": function() {
 		var signInModal = document.getElementById('signInModal');
 		signInModal.style.display = "block";
+	}, 
+	'click .notify-list' (event) {
+		// when the user clicks the icon when it's got notifications
+		// i want to show them a list of notifications currently marked as
+		// read: false
+
+		let modalNotify = document.getElementById('modal-notify');
+        modalNotify.style.display = "block";
 	}
 });

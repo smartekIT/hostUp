@@ -1,0 +1,39 @@
+<template name="notificationList">
+    <div id="modal-notify" class="myModal">
+        <div class="myModal-header">
+                <i class="fa fa-close notifyModal myModalClose"></i>
+                <h5>Un-read Notifications</h5>
+        </div>
+        <div class="myModal-content">
+            <div id="notify-container">
+                <table class="highlight striped">
+                    <thead>
+                        <tr>
+                            <th>URL</th>
+                            <th>Status</th>
+                            <th>Date / Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each notifications}}
+                            <tr>
+                                <td>
+                                    {{urlId}}
+                                </td>
+                                <td>
+                                    {{issue}}
+                                </td>
+                                <td>
+                                    {{issueFirstFoundOn}}
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="myModal-footer">
+            <a class="waves-effect waves-light btn clearAndClose">Mark Read and Close</a>
+        </div>
+    </div>
+</template>

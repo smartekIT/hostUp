@@ -26,13 +26,12 @@ Meteor.methods({
             issueFirstFoundOn: new Date(),
         });
     },
-    'mark.notificationAsRead' (NotifyId) {
-        check(NotifyId, String);
+    'mark.notificationAsRead' () {
 
-        Notify.update({ _id: NotifyId }, {
+        Notify.update({ read: false }, {
             $set: {
                 read: true,
             }
-        });
+        }, { multi: true });
     },
 });
