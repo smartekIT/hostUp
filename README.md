@@ -10,6 +10,7 @@ Host Up
 ## Table of Contents
 * [Running in Dev Mode](#dev-mode)
 * [User Basics](#user-basics)
+* [Demo Site](http://hostup.forceterminate.com:9001)
 * [Configuration](#config)
 * [Production Mode](#prod-mode)
   * [Production Mode - Need to Install](#prod-mode-needs)
