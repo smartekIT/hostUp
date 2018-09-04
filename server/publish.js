@@ -38,3 +38,21 @@ Meteor.publish("myNotifications", function() {
 
     return Notify.find({ ownerEmail: myUser, read: false });
 });
+ 
+Meteor.publish("allUsers", function() {
+    if (Roles.userIsInRole(this.userId, 'Admin')) {
+        return Meteor.users.find({});
+    }
+});
+
+Meteor.publish("allURLsToCheck", function() {
+    if (Roles.userIsInRole(this.userId, 'Admin')) {
+        return URLToCheck.find({});
+    }
+});
+
+Meteor.publish("allHostStatuses", function() {
+    if (Roles.userIsInRole(this.userId, 'Admin')) {
+        return HostStatus.find({ active: true });
+    }
+});
