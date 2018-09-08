@@ -22,10 +22,10 @@ Template.adminInfo.helpers({
         return URLToCheck.find().count();
     },
     upURLCount: function() {
-        return HostStatus.find({ status: "Up" }).count();
+        return HostStatus.find({ active: true, status: "Up" }).count();
     },
     downURLCount: function() {
-        return HostStatus.find({ status: { $ne: "Up" }}).count()
+        return HostStatus.find({ active: true, status: { $ne: "Up" }}).count()
     },
 });
 
