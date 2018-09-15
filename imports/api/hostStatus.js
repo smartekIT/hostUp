@@ -23,6 +23,8 @@ Meteor.methods({
         let thisURL = URLToCheck.findOne({ _id: urlId });
         let me = thisURL.addedBy;
 
+        // first we call the method to set all previous status to active = false
+        // then we return and update the host status entry.
         Meteor.call("hostStatus.updateActive", urlId);
 
         // add the new findings
