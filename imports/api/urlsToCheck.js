@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
+import { HostStatus } from './hostStatus.js';
 
 export const URLToCheck = new Mongo.Collection('urlToCheck');
 
@@ -69,9 +70,11 @@ Meteor.methods({
     'host.delete' (urlId) {
         check(urlId, String);
 
-        // if (!this.userId) {
-        //     throw new Meteor.Error('User is not allowed to remove URls from the system, make sure you are logged in..');
-        // }
+        if (!this.userId) {
+            throw new Meteor.Error('User is not allowed to remove URls from the system, make sure you are logged in..');
+        }
+
+        HostStatus.remove({ urlId: urlId }, { multi: true});
 
         return URLToCheck.remove({ _id: urlId });
     },

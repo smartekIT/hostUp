@@ -3,21 +3,18 @@ import { HostStatus } from '../../imports/api/hostStatus.js';
 import { PingStatus } from '../../imports/api/pingStatus.js';
 import { ConfigColl } from '../../imports/api/configColl.js';
  
-Template.adminInfo.onCreated(function() {
-    this.subscribe("allURLsToCheck");
-    this.subscribe("allHostStatuses");
+Template.userDash.onCreated(function() {
+    this.subscribe("urlChecks");
+    this.subscribe("hostStatuses");
     this.subscribe("configSettings");
-    this.subscribe("allUsers");
+    this.subscribe("pingStatuses");
 });
 
-Template.adminInfo.onRendered(function() {
+Template.userDash.onRendered(function() {
     
 });
 
-Template.adminInfo.helpers({
-    totalNoUsers: function() {
-        return Meteor.users.find().count();
-    },
+Template.userDash.helpers({
     totalURLs: function() {
         return URLToCheck.find().count();
     },
@@ -27,18 +24,23 @@ Template.adminInfo.helpers({
     downURLCount: function() {
         let downHosts = HostStatus.find({ active: true, status: { $ne: "Up" }}).count()
         if (downHosts == 0) {
-            Session.set("down", false);
+            Session.set("downHosts", false);
         } else {
-            Session.set("down", true);
+            Session.set("downHosts", true);
         }
         return downHosts;
     },
-    downColor: function() {
-        return Session.get("down");
+    downCardColor: function() {
+        return Session.get("downHosts");
+    },
+    shortPing: function() {
+        let shortTime = PingStatus.findOne({});
+        console.log("Short Time " + shortTime.pingTime);
+        return shortTime;
     },
 });
 
-Template.adminInfo.events({
+Template.userDash.events({
     'click #totalUsersCard' (event) {
         event.preventDefault();
 
