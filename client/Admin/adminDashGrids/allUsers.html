@@ -1,0 +1,49 @@
+<template name="allUsers">
+        <table class="highlight striped responsive-table">
+            <thead>
+                <tr class="thin">
+                    <th class="thin">
+                        Username
+                    </th>
+                    <th class="thin">
+                        Num of URLs
+                    </th>
+                    <th class="thin">
+                        Up URLs
+                    </th>
+                    <th class="thin">
+                        Down URLs
+                    </th>
+                    <th class="thin">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each userInfo}}
+                    <tr class="thin">
+                        <td class="thin">
+                            {{userEmail}}
+                        </td>
+                        <td class="thin">
+                            {{noUrls}}
+                        </td>
+                        <td class="thin">
+                            {{upUrls}}
+                        </td>
+                        <td class="thin">
+                            {{downUrls}}
+                        </td>
+                        <td class="thin">
+                            <select name="adminUserActions" class="adminUserActions">
+                                <option value="" disabled selected></option>
+                                <option value="Edit">Edit</option>
+                                <option value="Delete">Delete</option>
+                                <option value="Email">Send Email</option>
+                            </select>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+</template>

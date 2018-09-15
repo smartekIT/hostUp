@@ -11,7 +11,7 @@ Template.adminInfo.onCreated(function() {
 });
 
 Template.adminInfo.onRendered(function() {
-    
+    Session.set("adminDashGridView", "");
 });
 
 Template.adminInfo.helpers({
@@ -36,6 +36,9 @@ Template.adminInfo.helpers({
     downColor: function() {
         return Session.get("down");
     },
+    adminDashGrid: function() {
+        return Session.get("adminDashGridView");
+    },
 });
 
 Template.adminInfo.events({
@@ -43,7 +46,7 @@ Template.adminInfo.events({
         event.preventDefault();
 
         // now show a template to give the Users info grid
-    
+        Session.set("adminDashGridView", "userInfo");
     },
     'click #totalURLsCard' (event) {
         event.preventDefault();
@@ -51,13 +54,16 @@ Template.adminInfo.events({
         // now show a template to display all URLs in a grid
         // need to think about paging this, and / or filtering
 
+        Session.set("adminDashGridView", "allUrls")
+
     },
     'click #totalURLsUpCard' (event) {
         event.preventDefault();
 
-        // now show the UP URLs List - again think about pagin
+        // now show the UP URLs List - again think about paging
         // show URL - email of owner, and email to send a message to
 
+        Session.set("adminDashGridView", "allUpUrls");
     },
     'click #totalURLsDownCard' (event) {
         event.preventDefault();
@@ -65,5 +71,6 @@ Template.adminInfo.events({
         // now show the Down URLs list - and page it
         // show URL - email of owner, and email to send a message to
 
+        Session.set("adminDashGridView", "allDownUrls");
     },
 });
