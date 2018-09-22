@@ -62,16 +62,31 @@ Template.hostInput.events({
             }
         }
 
+        let urlValid;
+        console.log(url.slice(0,8));
+        console.log(url.slice(0,7));
+        if (url.slice(0,8) == "https://") {
+            urlValid = true;
+        } else if (url.slice(0,7) == "http://") {
+            urlValid = true;
+        } else {
+            urlValid = false;
+        }
 
-        Meteor.call("host.add", url, often, emailIsDown, emailAddress, function(err, result) {
-            if (err) {
-                console.log("Error adding host url: " + err);
-                showSnackbar("Error Adding Host!", "red");
-            } else {
-                showSnackbar("Host Added Successfully!", "green");
-                Meteor.call("hosts.call", result, url, often);
-            }
-        });
+        if (urlValid == true) {
+            Meteor.call("host.add", url, often, emailIsDown, emailAddress, function(err, result) {
+                if (err) {
+                    console.log("Error adding host url: " + err);
+                    showSnackbar("Error Adding Host!", "red");
+                } else {
+                    showSnackbar("Host Added Successfully!", "green");
+                    Meteor.call("hosts.call", result, url, often);
+                }
+            });
+        } else {
+            showSnackbar("URL is Invalid - Please enter a URL with http:// or https://", "red");
+            return;
+        }
     },
     'click #saveChangedURL' (event) {
         event.preventDefault();

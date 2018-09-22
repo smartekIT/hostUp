@@ -5,7 +5,7 @@
             {{#if isInRole 'PaidUser,Admin'}}
             <div class="row">
                 <div class="input-field col s12">
-                    <label for="urlToCheck">URL To Check</label>
+                    <label for="urlToCheck">URL To Check (https://yourdomain.org)</label>
                     <input type="text" class="urlToCheck" id="urlToCheck" value="{{#if $eq inputMode "edit"}}{{editUrl}}{{/if}}" />
                 </div>
             </div>

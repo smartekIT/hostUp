@@ -33,11 +33,6 @@ Template.userDash.helpers({
     downCardColor: function() {
         return Session.get("downHosts");
     },
-    shortPing: function() {
-        let shortTime = PingStatus.findOne({});
-        console.log("Short Time " + shortTime.pingTime);
-        return shortTime;
-    },
 });
 
 Template.userDash.events({
