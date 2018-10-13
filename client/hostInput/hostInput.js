@@ -121,20 +121,35 @@ Template.hostInput.events({
             often = parseInt(often);
         }
 
-        // set the mode to new so the user can enter new hosts if needed.
-        Session.set("inputMode", "new");
+        let urlValid;
+        console.log(url.slice(0,8));
+        console.log(url.slice(0,7));
+        if (url.slice(0,8) == "https://") {
+            urlValid = true;
+        } else if (url.slice(0,7) == "http://") {
+            urlValid = true;
+        } else {
+            urlValid = false;
+        }
 
-        // call the update method and pass the variables from above.
-        Meteor.call("host.edit", urlId, url, often, emailIsDown, emailAddress, function(err, result) {
-            if (err) {
-                console.log("Error adding host url: " + err);
-                showSnackbar("Error Adding Host!", "red");
-            } else {
-                showSnackbar("Host Added Successfully!", "green");
-                Meteor.call("hosts.call", urlId, url, often);
-            }
-        });
+        if (urlValid == true) {
+            // set the mode to new so the user can enter new hosts if needed.
+            Session.set("inputMode", "new");
 
+            // call the update method and pass the variables from above.
+            Meteor.call("host.edit", urlId, url, often, emailIsDown, emailAddress, function(err, result) {
+                if (err) {
+                    console.log("Error adding host url: " + err);
+                    showSnackbar("Error Adding Host!", "red");
+                } else {
+                    showSnackbar("Host Added Successfully!", "green");
+                    Meteor.call("hosts.call", urlId, url, often);
+                }
+            });
+        } else {
+            showSnackbar("URL is Invalid - Please enter a URL with http:// or https://", "red");
+            return;
+        }
     },
     'click #cancelHostInput' (event) {
         event.preventDefault();
@@ -155,5 +170,5 @@ Template.hostInput.events({
         event.preventDefault();
 
         console.log("Subscribe Clicked.");
-    }
+    },
 });

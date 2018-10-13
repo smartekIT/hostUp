@@ -1,3 +1,5 @@
+
+
 Template.myModal.onCreated(function() {
 
 });
@@ -21,7 +23,41 @@ Template.myModal.events({
         // console.log("Clicked Continue.");
 
         let source = Session.get("modalFrom");
+        let actionId = Session.get("actionId");
 
-        $("#genModal").modal('close');
-    }
+        switch (source) {
+            case "deleteUser":
+                Meteor.call("delete.User", actionId, function(err, result) {
+                    if (err) {
+                        console.log("Error deleting User: " + err);
+                        showSnackbar("Error Removing User!", "red");
+                    } else {
+                        showSnackbar("User Successfully Removed!", "green");
+                    }
+                });
+                break;
+            case "deleteURL":
+                Meteor.call("host.delete", actionId, function(err, result) {
+                    if (err) {
+                        console.log("Error deleting URL: " + err);
+                        showSnackbar("Error Removing URL!", "red");
+                    } else {
+                        showSnackbar("URL Successfully Removed!", "green");
+                    }
+                });
+                break;
+            default:
+                console.log("Action Passed Uknown: " + source + " with action id: " + actionId);
+                showSnackbar("Couldn't Not Complete Action from " + source, "red");
+        }
+
+        var myCalledModal = document.getElementById('genModal');
+        myCalledModal.style.display = 'none';
+    },
+    'click #cancel' (event) {
+        event.preventDefault();
+
+        var myCalledModal = document.getElementById('genModal');
+        myCalledModal.style.display = 'none';
+    },
 });

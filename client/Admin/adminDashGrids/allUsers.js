@@ -39,5 +39,27 @@ Template.allUsers.helpers({
 });
 
 Template.allUsers.events({
+    'change .adminUserActions' (event) {
+        event.preventDefault();
+        let selAction = event.currentTarget.value;
+        console.log("Selected action is: " + selAction);
+        console.log("-------------------------------");
 
+        if (selAction == 'Delete') {
+            let userId = this._id;
+            console.log("User Id selected is: " + userId);
+            
+            Session.set('modalHeader', "Delete User");
+            Session.set('modalBody', "You are about to delete a user. This cannot be undone once complete. If you wish to continue with this action, click 'Continue' below, otherwise click 'Cancel'.");
+            Session.set('actionId', userId);
+            Session.set('modalFrom', "deleteUser");
+            
+            var myCalledModal = document.getElementById('genModal');
+            myCalledModal.style.display = 'block';
+        } else if (selAction == 'Edit') {
+
+        } else if (selAction == 'Send Email') {
+
+        }
+    },
 });
