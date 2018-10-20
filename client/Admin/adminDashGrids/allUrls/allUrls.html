@@ -1,0 +1,28 @@
+<template name="allUrls">
+    <table class="highlight striped responsive-table">
+        <thead>
+            <tr>
+                <th>URL</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each URLStatus}}
+            <tr class="thin">
+                <td class="thin"><a href="{{url}}">{{url}}</a></td>
+                <td class="thin">{{runFor}}</td>
+                <td class="thin" style="background: {{statusColor}};">{{status}}</td>
+                <td class="thin">
+                    <select name="adminUrlActions" class="adminUrlActions">
+                        <option value="" disabled selected></option>
+                        <option value="Edit">Edit</option>
+                        <option value="Delete">Delete</option>
+                    </select>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</template>

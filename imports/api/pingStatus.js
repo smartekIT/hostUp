@@ -30,4 +30,13 @@ Meteor.methods({
             runOn: runNow,
         });
     },
+    'pingStatus.deleteAll' (urlId) {
+        check(urlId, String);
+
+        if (!this.userId) {
+            throw new Meteor.Error('User is not allowed to delete Ping Statuses from the system, make sure you are logged in.');
+        }
+
+        return PingStatus.remove({ urlId: urlId });
+    },
 });

@@ -47,5 +47,14 @@ Meteor.methods({
                 active: false,
             }
         }, { multi: true });
-    }
+    },
+    'hostStatus.deleteAll' (urlId) {
+        check(urlId, String);
+
+        if (!this.userId) {
+            throw new Meteor.Error('User is not allowed to delete URL Statuses from the system, make sure you are logged in.');
+        }
+
+        return HostStatus.remove({ urlId: urlId });
+    },
 });

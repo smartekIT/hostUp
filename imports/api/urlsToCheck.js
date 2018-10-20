@@ -74,9 +74,6 @@ Meteor.methods({
             throw new Meteor.Error('User is not allowed to remove URls from the system, make sure you are logged in..');
         }
 
-        // first we delete all of the statuses for this host - get rid of db clutter
-        HostStatus.remove({ urlId: urlId }, { multi: true});
-
         // now we return and get rid of the host entry itself
         return URLToCheck.remove({ _id: urlId });
     },

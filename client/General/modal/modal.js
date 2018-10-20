@@ -1,7 +1,10 @@
-
+import { HostStatus } from '../../../imports/api/hostStatus.js';
+import { URLToCheck } from '../../../imports/api/urlsToCheck.js';
+import { PingStatus } from '../../../imports/api/pingStatus.js';
 
 Template.myModal.onCreated(function() {
-
+    this.subscribe("allHostStatuses");
+    this.subscribe("allURLsToCheck");
 });
 
 Template.myModal.onRendered(function() {
@@ -42,6 +45,25 @@ Template.myModal.events({
                         console.log("Error deleting URL: " + err);
                         showSnackbar("Error Removing URL!", "red");
                     } else {
+                        // now delete hostStatus info for this URL
+                        console.log("Success on URL from URLToCheck.");
+                        Meteor.call("hostStatus.deleteAll", actionId, function(err, result) {
+                            if (err) {
+                                console.log("Error deleting url statuses: " + err);
+                                showSnackbar("Error Removing URL Statuses!",  "red");
+                            } else {
+                                // now remove the Ping Statuses as well.
+                                console.log("Success on URL from HostStatus.");
+                                Meteor.call("pingStatus.deleteAll", actionId, function(err, result) {
+                                    if (err) {
+                                        console.log("Error deleting Ping Statuses: " + err);
+                                        showSnackbar("Error Removing URL Ping Statuses!", "red");
+                                    } else {
+                                        console.log("Success on URL from PingStatus");
+                                    }
+                                });
+                            }
+                        });
                         showSnackbar("URL Successfully Removed!", "green");
                     }
                 });

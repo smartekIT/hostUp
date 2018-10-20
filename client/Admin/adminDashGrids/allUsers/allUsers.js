@@ -1,5 +1,5 @@
-import { HostStatus } from '../../../imports/api/hostStatus.js';
-import { URLToCheck } from '../../../imports/api/urlsToCheck.js';
+import { HostStatus } from '../../../../imports/api/hostStatus.js';
+import { URLToCheck } from '../../../../imports/api/urlsToCheck.js';
 
 Template.allUsers.onCreated(function() {
     this.subscribe('allUsers');
@@ -42,8 +42,8 @@ Template.allUsers.events({
     'change .adminUserActions' (event) {
         event.preventDefault();
         let selAction = event.currentTarget.value;
-        console.log("Selected action is: " + selAction);
-        console.log("-------------------------------");
+        // console.log("Selected action is: " + selAction);
+        // console.log("-------------------------------");
 
         if (selAction == 'Delete') {
             let userId = this._id;
