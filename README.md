@@ -10,7 +10,7 @@ Host Up
 ## Table of Contents
 * [Running in Dev Mode](#dev-mode)
 * [User Basics](#user-basics)
-* [Demo Site](http://hostup.routemehome.org) admin user: demo     admin passsword: demoadmin
+* [Demo Site](http://hostup.routemehome.org) / admin user: demo / admin passsword: demoadmin
 * [Configuration](#config)
 * [Production Mode](#prod-mode)
   * [Production Mode - Need to Install](#prod-mode-needs)
