@@ -33,6 +33,28 @@ Template.userDash.helpers({
     downCardColor: function() {
         return Session.get("downHosts");
     },
+    totalCount: function() {
+        let upTotal = HostStatus.find({ status: "Up" }).count();
+        Session.set("upTotal", upTotal);
+        let downTotal = HostStatus.find({ status: { $ne: "Up" }}).count();
+        let percentDiff = Math.abs(((upTotal - downTotal) / upTotal) * 100);
+        let totals = {};
+        totals.upTotal = upTotal;
+        totals.downTotal = downTotal;
+        
+        if (percentDiff <= 20 && percentDiff > 10) {
+            totals.myColor = "orange";
+        } else if (percentDiff <= 10) {
+            totals.myColor = "red";
+        } else if (percentDiff > 20 && percentDiff <= 50) {
+            totals.myColor = "yellow";
+        } else {
+            totals.myColor = "green";
+        }
+
+        totals.percentDiff = percentDiff;
+        return totals;
+    },
 });
 
 Template.userDash.events({

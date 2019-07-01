@@ -13,8 +13,15 @@ Meteor.publish("urlChecks", function() {
 Meteor.publish("hostStatuses", function() {
     let myUser = Meteor.user().emails[0].address;
     
-    return HostStatus.find({ runFor: myUser, active: true });
-
+    // return HostStatus.find({ runFor: myUser, active: true });
+    // return HostStatus.find({ runFor: myUser });
+    return HostStatus.find({ 
+        "runOn" : { 
+          $lt: new Date(), 
+          $gte: new Date(new Date().setDate(new Date().getDate()-1))
+        },
+        "runFor": myUser
+      });
 });
 
 Meteor.publish("pingStatuses", function(myUrl) {

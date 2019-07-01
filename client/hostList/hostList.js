@@ -65,7 +65,7 @@ Template.hostList.helpers({
     defaultSiteInfo: function() {
         let myConfig = {};
         let config = ConfigColl.findOne();
-        if (typeof config == 'undefined' || config.maxNoOfSitesFree == null || config.maxNoOfSitesFree == "" || typeof config.maxNoOfSitesFree == 'undefined') {
+        if (typeof config == 'undefined' || isNaN(config.maxNoOfSitesFree) || typeof config.maxNoOfSitesFree == 'undefined' || config.maxNoOfSitesFree == null || config.maxNoOfSitesFree == "" || typeof config.maxNoOfSitesFree == 'undefined') {
             myConfig.maxNoOfSitesFree = "No Limit";
         } else {
             myConfig.maxNoOfSitesFree = config.maxNoOfSitesFree;
@@ -100,16 +100,13 @@ Template.hostList.events({
         event.preventDefault();
 
         let hostId = this._id;
-        // console.log("Host id: " + hostId);
 
-        Meteor.call('host.delete', hostId, function(err, result){
-            if (err) {
-                console.log("Error deleting host: " + err);
-                showSnackbar("Error Deleting Host", "red");
-            } else {
-                showSnackbar("Host Deleted Successfully!", "green");
-            }
-        });
+        Session.set("confirmationDialogTitle", "Confirm Delete of Host");
+        Session.set("confirmationDialogContent", "You are about to delete a host you are currently monitoring for up stats.  If you are certain you wish to delete this host, confirm by clicking the button below.");
+        Session.set("eventConfirmCallBackFunction", "confirmHostDelete");
+        Session.set("eventConfirmNecessaryId", hostId);
+
+        $("#confirmationDialog").modal('open');
     },
     'click .getPingInfo' (event) {
         Session.set("myUrl", this.url);
@@ -133,4 +130,15 @@ pullPings = function(pingObj) {
         let modalPing = document.getElementById('modal-ping');
         modalPing.style.display = "block";
     }, 250);
+}
+
+confirmHostdelete = function(hostId) {
+    Meteor.call('host.delete', hostId, function(err, result){
+        if (err) {
+            console.log("Error deleting host: " + err);
+            showSnackbar("Error Deleting Host", "red");
+        } else {
+            showSnackbar("Host Deleted Successfully!", "green");
+        }
+    });
 }

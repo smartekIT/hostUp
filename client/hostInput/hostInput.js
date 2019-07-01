@@ -63,8 +63,8 @@ Template.hostInput.events({
         }
 
         let urlValid;
-        console.log(url.slice(0,8));
-        console.log(url.slice(0,7));
+        // console.log(url.slice(0,8));
+        // console.log(url.slice(0,7));
         if (url.slice(0,8) == "https://") {
             urlValid = true;
         } else if (url.slice(0,7) == "http://") {
