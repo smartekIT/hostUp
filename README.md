@@ -4,7 +4,7 @@ Host Up
 <br />
 
 ## hostUp - A simple URL Status Checker for Uptime
-#### Written with MeteorJS using NodeJS, HTML5, Javascript
+#### Written with MeteorJS using NodeJS, HTML5, Javascript, and MongoDB
 
 <a id="hostUp-toc" name="hostUp-toc"></a>
 ## Table of Contents
@@ -19,6 +19,7 @@ Host Up
     * [Production Mode - Set Some Environmental Variables](#env-vars)
 * [To Do Still](#to-do-still)
 * [Contribute](#contribute)
+* [License](#license)
 
 <br />
 
@@ -75,7 +76,7 @@ The menu icon in the upper left allows you to move to the input screen and back 
 
 <a id="config" name="config"></a>
 ### Configuration
-You can setup default time in minutes for each check to occur of the entered sites as well as the max number of sites a user can have.
+You can setup default time in minutes for each check of the entered sites to occur, as well as the max number of sites a user can have.
 
 #### Email Setup
 You can setup the system to email out a notice to a specified email for each site you are monitoring.  You must setup the SMTP send mail information and save it.
@@ -85,7 +86,7 @@ I have tested this and it does work.
 ##### Example
 Email Username: greg
 
-Email Password: f93kfjaldj4 59%4k3l # 4JJ
+Email Password: f93kfjaldj459%4k3l# 4JJ
 
 SMTP Server URL: smtp.gmail.com
 
@@ -288,3 +289,7 @@ I would like to add a per URL timer setting.  I had this in originally, but foun
 <a id="contribute" name="contribute"></a>
 ## Contribute
 I'm always 100% open to contributions from anyone willing to help out, learn or otherwise.
+
+<a id="license" name="license"></a>
+## License
+This software is licensed as AGPL v3.0, please respect it.
