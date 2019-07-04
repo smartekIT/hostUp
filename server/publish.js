@@ -21,7 +21,7 @@ Meteor.publish("hostStatuses", function() {
           $gte: new Date(new Date().setDate(new Date().getDate()-1))
         },
         "runFor": myUser
-      });
+      }, { limit: 100 });
 });
 
 Meteor.publish("pingStatuses", function(myUrl) {
