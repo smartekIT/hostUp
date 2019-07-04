@@ -6,6 +6,8 @@ Host Up
 ## hostUp - A simple URL Status Checker for Uptime
 #### Written with MeteorJS using NodeJS, HTML5, Javascript, and MongoDB
 
+![Imgur Image](https://imgur.com/vQDN2E5.gif)
+
 <a id="hostUp-toc" name="hostUp-toc"></a>
 ## Table of Contents
 * [Running in Dev Mode](#dev-mode)
