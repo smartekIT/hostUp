@@ -15,6 +15,7 @@ Template.hostList.onCreated(function() {
 
 Template.hostList.onRendered(function() {
     $('.collapsible').collapsible();
+    $('.modal').modal();
 });
 
 Template.hostList.helpers({
@@ -97,13 +98,15 @@ Template.hostList.events({
         FlowRouter.go('/hostInput');
     },
     'click .deleteHost' (event) {
-        event.preventDefault();
+        event.preventDefault();;
 
         let hostId = this._id;
 
+        console.log("Clicked Host Delete for ID: " + hostId)
+
         Session.set("confirmationDialogTitle", "Confirm Delete of Host");
         Session.set("confirmationDialogContent", "You are about to delete a host you are currently monitoring for up stats.  If you are certain you wish to delete this host, confirm by clicking the button below.");
-        Session.set("eventConfirmCallBackFunction", "confirmHostDelete");
+        Session.set("eventConfirmCallbackFunction", "confirmHostdelete");
         Session.set("eventConfirmNecessaryId", hostId);
 
         $("#confirmationDialog").modal('open');
