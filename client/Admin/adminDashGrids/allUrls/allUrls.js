@@ -13,7 +13,7 @@ Template.allUrls.onRendered(function() {
 
 Template.allUrls.helpers({
     URLStatus: function() {
-        return HostStatus.find({}, { sort: { runFor: 1 }});
+        return HostStatus.find({ active: true }, { sort: { runFor: 1 }});
     },
 });
 
@@ -39,6 +39,23 @@ Template.allUrls.events({
             
         } else if (selAction == "Edit") {
 
+        } else if (selection == "Email Owner") {
+
+        } else {
+            showSnackbar("You Selection was not recognized! Please Try Again!");
         }
     },
 });
+
+deleteURL = function(actionId) {
+    Meteor.call('host.delete', actionId, function(err, result) {
+        if (err) {
+            console.log("Error deleting host with Id: " + actionId + " - " + err);
+            showSnackbar("Error Deleting Host URL!", "red");
+        } else {
+            showSnackbar("Host Deleted Successfully!", "green");
+            // I should add something here to email the owner of the host URL and let them
+            // know an admin deleted it.
+        }
+    });
+}
