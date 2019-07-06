@@ -41,6 +41,7 @@ Template.userDash.helpers({
         let totals = {};
         totals.upTotal = upTotal;
         totals.downTotal = downTotal;
+        totals.percentDiff = percentDiff;
         
         if (percentDiff <= 20 && percentDiff > 10) {
             totals.myColor = "orange";
