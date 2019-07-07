@@ -13,7 +13,16 @@ Template.allUrls.onRendered(function() {
 
 Template.allUrls.helpers({
     URLStatus: function() {
-        return HostStatus.find({ active: true }, { sort: { runFor: 1 }});
+        let statusWanted = Session.get("adminDashGridView");
+        if (statusWanted == "allUrls") {
+            return HostStatus.find({ active: true }, { sort: { runFor: 1 }});
+        } else if (statusWanted == "allUpUrls") {
+            return HostStatus.find({ active: true, status: "Up" }, { sort: { runFor: 1 }});
+        } else if (statusWanted == "allDownUrls") {
+            return HostStatus.find({ active: true, status: { $ne: "Up" }}, { sort: { runFor: 1 }});
+        } else {
+            return;
+        }
     },
 });
 

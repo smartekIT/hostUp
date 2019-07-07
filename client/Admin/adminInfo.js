@@ -12,6 +12,7 @@ Template.adminInfo.onCreated(function() {
 
 Template.adminInfo.onRendered(function() {
     Session.set("adminDashGridView", "");
+    $(".tooltipped").tooltip();
 });
 
 Template.adminInfo.helpers({

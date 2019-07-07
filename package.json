@@ -7,7 +7,8 @@
   "dependencies": {
     "@babel/runtime": "^7.4.5",
     "bcrypt": "^2.0.1",
-    "highcharts": "^6.1.2",
+    "highcharts": "^6.2.0",
+    "highcharts-more": "^0.1.7",
     "meteor-node-stubs": "^0.3.2",
     "shelljs": "^0.8.2"
   }
