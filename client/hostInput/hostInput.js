@@ -10,7 +10,7 @@ Template.hostInput.onRendered(function() {
 
 });
 
-Template.hostInput.helpers({
+Template.hostInputForm.helpers({
     urlId: function() {
         return Session.get("urlId");
     },
@@ -29,27 +29,35 @@ Template.hostInput.helpers({
     inputMode: function() {
         return Session.get("inputMode");
     },
+});
+
+Template.hostInput.helpers({
     canAddSite: function() {
         let config = ConfigColl.findOne({});
-        let maxSitesUnPaid = config.maxNoOfSitesFree;
+        if (config) {
+            let maxSitesUnPaid = config.maxNoOfSitesFree;
 
-        let myNoSites = URLToCheck.find().count();
-
-        if (myNoSites >= maxSitesUnPaid) {
-            return false;
+            let myNoSites = URLToCheck.find().count();
+    
+            if (myNoSites >= maxSitesUnPaid) {
+                return false;
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
     },
 });
 
-Template.hostInput.events({
+Template.hostInputForm.events({
     'click #submitURL' (event) {
         event.preventDefault();
 
         let url = $("#urlToCheck").val();
         let emailIsDown = $('#emailIfDown').prop('checked')
         let emailAddress = $("#emailAddress").val();
+        let nmapScan = $("#nmapScan").prop('checked');
         let often = 20;
 
         if (url == "" || url == null) {
@@ -74,7 +82,7 @@ Template.hostInput.events({
         }
 
         if (urlValid == true) {
-            Meteor.call("host.add", url, often, emailIsDown, emailAddress, function(err, result) {
+            Meteor.call("host.add", url, often, emailIsDown, emailAddress, nmapScan, function(err, result) {
                 if (err) {
                     console.log("Error adding host url: " + err);
                     showSnackbar("Error Adding Host!", "red");
@@ -98,6 +106,7 @@ Template.hostInput.events({
         let often = $("#checkFrequency").val();
         let emailIsDown = $('#emailIfDown').prop('checked')
         let emailAddress = $("#emailAddress").val();
+        let nmapScan = $("#nmapScan").prop('checked');
 
         // console.log(("Email If down if: " + emailIfDown));
 
@@ -122,8 +131,8 @@ Template.hostInput.events({
         }
 
         let urlValid;
-        console.log(url.slice(0,8));
-        console.log(url.slice(0,7));
+        // console.log(url.slice(0,8));
+        // console.log(url.slice(0,7));
         if (url.slice(0,8) == "https://") {
             urlValid = true;
         } else if (url.slice(0,7) == "http://") {
@@ -137,7 +146,7 @@ Template.hostInput.events({
             Session.set("inputMode", "new");
 
             // call the update method and pass the variables from above.
-            Meteor.call("host.edit", urlId, url, often, emailIsDown, emailAddress, function(err, result) {
+            Meteor.call("host.edit", urlId, url, often, emailIsDown, emailAddress, nmapScan, function(err, result) {
                 if (err) {
                     console.log("Error adding host url: " + err);
                     showSnackbar("Error Adding Host!", "red");
@@ -163,6 +172,7 @@ Template.hostInput.events({
             $("#urlToCheck").val("");
             $("#checkFrequency").val("");
             $('#emailIfDown').prop('checked', false);
+            $("#nmapScan").prop('checked', false);
             $("#emailAddress").val("");
         }
     },

@@ -18,11 +18,12 @@ Meteor.methods({
     //  Add URLs to Check
     //
     // ******************************************************************
-    'host.add' (url, timeBetweenChecks, emailIfDown, emailAddress) {
+    'host.add' (url, timeBetweenChecks, emailIfDown, emailAddress, nmapScan) {
         check(url, String);
         check(timeBetweenChecks, Number);
         check(emailIfDown, Boolean);
         check(emailAddress, String);
+        check(nmapScan, Boolean);
 
         if (!this.userId) {
             throw new Meteor.Error('User is not allowed to add URLs to the system, make sure you are logged in.');
@@ -33,6 +34,7 @@ Meteor.methods({
             freqCheck: timeBetweenChecks,
             emailIfDown: emailIfDown,
             emailAddress: emailAddress,
+            nmapScan: nmapScan,
             addedBy: Meteor.user().emails[0].address,
         });
     },
@@ -41,12 +43,13 @@ Meteor.methods({
     //  Edit URLs to check
     //
     // ******************************************************************
-    'host.edit' (urlId, url, timeBetweenChecks, emailIfDown, emailAddress, emailRepeat, emailRepeatHowOften) {
+    'host.edit' (urlId, url, timeBetweenChecks, emailIfDown, emailAddress, nmapScan) {
         check(urlId, String);
         check(url, String);
         check(timeBetweenChecks, Number);
         check(emailIfDown, Boolean);
         check(emailAddress, String);
+        check(nmapScan, Boolean);
 
         if (!this.userId) {
             throw new Meteor.Error('User is not allowed to edit URLs to the system, make sure you are logged in.');
@@ -58,6 +61,7 @@ Meteor.methods({
                 freqCheck: timeBetweenChecks,
                 emailIfDown: emailIfDown,
                 emailAddress: emailAddress,
+                nmapScan: nmapScan,
                 updatedBy:  Meteor.user().emails[0].address,
             }
         });
