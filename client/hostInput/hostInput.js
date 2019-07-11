@@ -152,7 +152,7 @@ Template.hostInputForm.events({
                     showSnackbar("Error Adding Host!", "red");
                 } else {
                     showSnackbar("Host Added Successfully!", "green");
-                    Meteor.call("hosts.call", urlId, url, often);
+                    Meteor.call("hosts.call", urlId, url, often, nmapScan);
                 }
             });
         } else {

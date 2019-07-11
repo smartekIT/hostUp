@@ -29,12 +29,17 @@ Meteor.methods({
             throw new Meteor.Error('User is not allowed to add URLs to the system, make sure you are logged in.');
         }
 
+        let now = new Date();
+
+        let nmapScanRecheck = moment(now).format('YYYY-MM-DD HH:mm:ss');
+
         return URLToCheck.insert({
             url: url,
             freqCheck: timeBetweenChecks,
             emailIfDown: emailIfDown,
             emailAddress: emailAddress,
             nmapScan: nmapScan,
+            nmapScanRecheck: nmapScanRecheck,
             addedBy: Meteor.user().emails[0].address,
         });
     },
@@ -55,6 +60,10 @@ Meteor.methods({
             throw new Meteor.Error('User is not allowed to edit URLs to the system, make sure you are logged in.');
         }
 
+        let now = new Date();
+
+        let nmapScanRecheck = moment(now).format('YYYY-MM-DD HH:mm:ss');
+
         return URLToCheck.update({ _id: urlId }, {
             $set: {
                 url: url,
@@ -62,6 +71,7 @@ Meteor.methods({
                 emailIfDown: emailIfDown,
                 emailAddress: emailAddress,
                 nmapScan: nmapScan,
+                nmapScanRecheck: nmapScanRecheck,
                 updatedBy:  Meteor.user().emails[0].address,
             }
         });
@@ -82,5 +92,18 @@ Meteor.methods({
         // now we return and get rid of the host entry itself
 
         return URLToCheck.remove({ _id: urlId });
+    },
+    'urlHost.updateNmap' (urlId) {
+        check(urlId, String);
+
+        let now = new Date();
+
+        let nmapScanRecheck = moment(now).add(7, 'days').format('YYYY-MM-DD HH:mm:ss');
+
+        URLToCheck.update({ _id: urlId }, {
+            $set: {
+                nmapScanRecheck, nmapScanRecheck,
+            }
+        });
     },
 });
