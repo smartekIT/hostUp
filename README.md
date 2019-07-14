@@ -249,9 +249,9 @@ We can run a very simple test to make sure we've set everything up properly.
 
 Move back to the `bundle` directory:
 
-    `cd ..`  <-- move back one folder level
+`cd ..`  <-- move back one folder level
 
-    `cd ..`  <-- move back one folder level again.  We should now be in the bundle directory
+`cd ..`  <-- move back one folder level again.  We should now be in the bundle directory
 
 Now, Run the command:
 
