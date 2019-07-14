@@ -182,6 +182,9 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
 <a id="prod-mode-forever" name="prod-mode-forever"></a>
 ### Production Mode - Run It Forever
+   13a. I never say it, I noteiced, but you will need NodeJS and NPM installed on this server for Production mode.
+      - You'll need NodeJS 8.15.1
+      
    13. Install "forever" from npm onto your production server.
 
     `npm i -g forever`
