@@ -182,10 +182,11 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 
 <a id="prod-mode-forever" name="prod-mode-forever"></a>
 ### Production Mode - Run It Forever
-   13a. I never say it, I noteiced, but you will need NodeJS and NPM installed on this server for Production mode.
-      - You'll need NodeJS 8.15.1
+13a. I never say it, I noteiced, but you will need NodeJS and NPM installed on this server for Production mode.
+
+- You'll need NodeJS 8.15.1
       
-   13. Install "forever" from npm onto your production server.
+13. Install "forever" from npm onto your production server.
 
     npm i -g forever
 
@@ -201,29 +202,29 @@ From the app directory created when you cloned the git repo, run the following c
 
 <a id="prod-mode-build" name="prod-mode-build"></a>
 #### Production Mode - Build
-    `meteor build --directory ../hostUp-node`
+    meteor build --directory ../hostUp-node
 
-    This 'compiles' the app and minifies all the css and js as well as makes the actual nodejs capable version.
+This 'compiles' the app and minifies all the css and js as well as makes the actual nodejs capable version.
 
-    15. When it's done, move back one directory, and into the newly created build directory.
+15. When it's done, move back one directory, and into the newly created build directory.
 
-    `cd ../hostUp-node`
+    cd ../hostUp-node
 
-    16. Now, do an `ls` and notice the `bundle` directory.
+16. Now, do an `ls` and notice the `bundle` directory.
 
-    `cd bundle`
+    cd bundle
 
-    17. Now we need to install dependencies.
+17. Now we need to install dependencies.
 
-    `cd programs/server`  --> so the full path we are in is `~/hostUp-node/bundle/programs/server`
+    cd programs/server  --> so the full path we are in is `~/hostUp-node/bundle/programs/server`
 
-    `npm install`
+    npm install
 
-    This will install all npm dependencies for the production system.
+This will install all npm dependencies for the production system.
 
-    18. Now we need to set some environmental variables for our app to use when running.
+18. Now we need to set some environmental variables for our app to use when running.
 
-    First let's set the MONGO_URL (tell the app where to connect to our Mongo DB).  Remember this can be run locally, but certainly doesn't have to be, so yoru MONBO_URL may refer to a different server URL or IP.
+First let's set the MONGO_URL (tell the app where to connect to our Mongo DB).  Remember this can be run locally, but certainly doesn't have to be, so yoru MONBO_URL may refer to a different server URL or IP.
 
 <a id="env-vars" name="env-vars"></a>
 #### Set Some Environment Variables
