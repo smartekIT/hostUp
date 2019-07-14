@@ -187,7 +187,7 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
       
    13. Install "forever" from npm onto your production server.
 
-    `npm i -g forever`
+    npm i -g forever
 
 >
 > NOTE: you need to run the -g option with root privileges. (this may require `sudo` or whatever varian of it for your chosen OS)
