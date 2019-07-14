@@ -228,65 +228,65 @@ First let's set the MONGO_URL (tell the app where to connect to our Mongo DB).  
 
 <a id="env-vars" name="env-vars"></a>
 #### Set Some Environment Variables
-    `export MONGO_URL="mongodb://127.0.0.1:27017/hostUp"`
+    export MONGO_URL="mongodb://127.0.0.1:27017/hostUp"
 
-    This command tells the system to find mongodb on our local server, and to use port 27017 (however, if you told mongo to run on a different port, then please change that number to match the port number you selected), and to use a database called "hostUp".
+This command tells the system to find mongodb on our local server, and to use port 27017 (however, if you told mongo to run on a different port, then please change that number to match the port number you selected), and to use a database called "hostUp".
 
-    19. Now we'll tell our app what it's main URL is (basically what a user will type into their browser to get to our web based application).
+19. Now we'll tell our app what it's main URL is (basically what a user will type into their browser to get to our web based application).
 
-    `export ROOT_URL="http://<your web site name or IP>"`
+    export ROOT_URL="http://<your web site name or IP>"
 
-    20. Now, we tell our app that it should run on a port.  If you want someone one to just type the name of your site and get straight to your app, then use port 80.  Any other port (besides 443) will need the user to enter the port after your web site name like this `http://<my-site-name>:port`
+20. Now, we tell our app that it should run on a port.  If you want someone one to just type the name of your site and get straight to your app, then use port 80.  Any other port (besides 443) will need the user to enter the port after your web site name like this `http://<my-site-name>:port`
 
-    >
-    > NOTE: you can also setup NGinX web server to act as a reverse proxy to your site.  There are several tutorials on this, as well as tutorials on using LetsEncrypt to get a free SSL Certificate.   I highly recommend doing this if you intend to have a production site.
-    >
+>
+> NOTE: you can also setup NGinX web server to act as a reverse proxy to your site.  There are several tutorials on this, as well as tutorials on using LetsEncrypt to get a free SSL Certificate.   I highly recommend doing this if you intend to have a production site.
+>
 
-    `export PORT=80`
+    export PORT=80
 
-    ### Now try the site.
-    We can run a very simple test to make sure we've set everything up properly.
+### Now try the site.
+We can run a very simple test to make sure we've set everything up properly.
 
-    Move back to the `bundle` directory:
+Move back to the `bundle` directory:
 
     `cd ..`  <-- move back one folder level
 
     `cd ..`  <-- move back one folder level again.  We should now be in the bundle directory
 
-    Now, Run the command:
+Now, Run the command:
 
-    `node main.js`
+    node main.js
 
-    from the `bundle` directory in our production app main directory.
+from the `bundle` directory in our production app main directory.
 
-    Give it about 10 seconds, then if you don't get any errors in the terminal, go to your web site or IP.  Don't forget, that if you didn't specify a port, use port 3000, and if you specified a port other than 80, enter that port after your site name and a colon.
+Give it about 10 seconds, then if you don't get any errors in the terminal, go to your web site or IP.  Don't forget, that if you didn't specify a port, use port 3000, and if you specified a port other than 80, enter that port after your site name and a colon.
 
-    The site should come up to a login / welcome page.
+The site should come up to a login / welcome page.
 
-    If it does AWESOME!
+If it does AWESOME!
 
-    If not, it's time for trouble shooting.
+If not, it's time for trouble shooting.
 
-    ### Make the Site Stay Up And Running Unattended
-    Now, we want our site to continue running.  The issue with the `node` command, is that when we close our terminal, it will kill our node command.
+### Make the Site Stay Up And Running Unattended
+Now, we want our site to continue running.  The issue with the `node` command, is that when we close our terminal, it will kill our node command.
 
-    For this we use a tool called "forever".
+For this we use a tool called "forever".
 
-    So, first, in the terminal do the key combo `CTRL+C`, this will tell our node app to stop.
+So, first, in the terminal do the key combo `CTRL+C`, this will tell our node app to stop.
 
-    Next we want to start the app again using "forever".
+Next we want to start the app again using "forever".
 
-    It's easy.
+It's easy.
 
-    `forever start -l forever.log -o output.log -e error.log main.js`
+    forever start -l forever.log -o output.log -e error.log main.js
 
-    What this says is start our main.js with the forever command.  Output anything that forever would put out to the terminal window into a file called forever.log, and any normal output from our app to output.log, and any errors that happen to a file called error.log.
+What this says is start our main.js with the forever command.  Output anything that forever would put out to the terminal window into a file called forever.log, and any normal output from our app to output.log, and any errors that happen to a file called error.log.
 
-    In my setup the file forever.log is located in /home/<my user>/.forever
+In my setup the file forever.log is located in /home/<my user>/.forever
 
-    When you hit enter, it should start.  Now you can close the terminal window and still get to your web application.
+When you hit enter, it should start.  Now you can close the terminal window and still get to your web application.
 
-    Enjoy!
+Enjoy!
 
 <a id="to-do-still" name="to-do-still"></a>
 ## To Do Still
