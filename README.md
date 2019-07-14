@@ -194,7 +194,7 @@ I do run all of my public servers on Digital Ocean.  I love their ease of setup,
 >
 
     Forever is an application that will watch your app and make sure it comes back up should it crash for some reason.
-
+    
     14. We need to build the meteor app to run for production.  It's not hard, just takes some time.
 
     From the app directory created when you cloned the git repo, run the following command.  Notice that I'm telling the app to build in a different directory than the one I'm in.
